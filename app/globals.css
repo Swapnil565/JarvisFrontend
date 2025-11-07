@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --font-inter: 'Inter', system-ui, sans-serif;
+    --font-space-grotesk: 'Space Grotesk', system-ui, sans-serif;
+  }
+
+  * {
+    @apply border-jarvis-gray/20;
+  }
+
+  body {
+    @apply bg-jarvis-navy text-white font-sans antialiased;
+  }
+
+  /* Dark mode is default */
+  .dark {
+    color-scheme: dark;
+  }
+}
+
+@layer components {
+  /* Glass Morphism Card */
+  .glass-card {
+    @apply bg-jarvis-navy-light/60 backdrop-blur-xl border border-jarvis-cyan/10 rounded-2xl;
+    @apply shadow-[0_8px_32px_rgba(0,0,0,0.3)];
+  }
+
+  /* Glass Morphism with Glow */
+  .glass-glow {
+    @apply glass-card;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(0, 217, 255, 0.1),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+
+  /* Button Base */
+  .btn {
+    @apply px-6 py-3 rounded-xl font-medium transition-all duration-200;
+    @apply active:scale-95;
+  }
+
+  /* Primary Button (Cyan) */
+  .btn-primary {
+    @apply btn bg-jarvis-cyan text-jarvis-navy;
+    @apply hover:bg-jarvis-cyan-light;
+    @apply shadow-[0_4px_16px_rgba(0,217,255,0.3)];
+  }
+
+  /* Secondary Button (Transparent with border) */
+  .btn-secondary {
+    @apply btn bg-transparent border-2 border-jarvis-cyan/30 text-jarvis-cyan;
+    @apply hover:border-jarvis-cyan hover:bg-jarvis-cyan/10;
+  }
+
+  /* Ghost Button */
+  .btn-ghost {
+    @apply btn bg-transparent text-jarvis-gray;
+    @apply hover:bg-white/5 hover:text-white;
+  }
+
+  /* Input Base */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl;
+    @apply bg-jarvis-navy-light/60 backdrop-blur-xl;
+    @apply border border-jarvis-cyan/20;
+    @apply text-white placeholder:text-jarvis-gray;
+    @apply focus:outline-none focus:border-jarvis-cyan focus:ring-2 focus:ring-jarvis-cyan/20;
+    @apply transition-all duration-200;
+  }
+
+  /* Heading Styles */
+  .heading-xl {
+    @apply font-display text-5xl md:text-6xl font-bold tracking-tight;
+  }
+
+  .heading-lg {
+    @apply font-display text-4xl md:text-5xl font-bold tracking-tight;
+  }
+
+  .heading-md {
+    @apply font-display text-3xl md:text-4xl font-semibold tracking-tight;
+  }
+
+  .heading-sm {
+    @apply font-display text-2xl md:text-3xl font-semibold tracking-tight;
+  }
+
+  /* Body Text */
+  .text-body {
+    @apply text-base md:text-lg text-jarvis-gray leading-relaxed;
+  }
+
+  .text-body-lg {
+    @apply text-lg md:text-xl text-jarvis-gray leading-relaxed;
+  }
+
+  /* Breathing Room - JARVIS principle */
+  .breathing-room {
+    @apply p-8 md:p-12 space-y-6;
+  }
+
+  /* Status Badge */
+  .status-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium;
+  }
+
+  .status-complete {
+    @apply status-badge bg-jarvis-green/10 text-jarvis-green border border-jarvis-green/20;
+  }
+
+  .status-incomplete {
+    @apply status-badge bg-jarvis-gray/10 text-jarvis-gray border border-jarvis-gray/20;
+  }
+
+  /* Streak Counter */
+  .streak-counter {
+    @apply inline-flex items-center gap-2 text-2xl font-bold;
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-jarvis-amber to-jarvis-cyan;
+  }
+
+  /* Smooth Scroll */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@layer utilities {
+  /* Cyan Glow Effect */
+  .glow-cyan {
+    box-shadow: 
+      0 0 20px rgba(0, 217, 255, 0.3),
+      0 0 40px rgba(0, 217, 255, 0.1);
+  }
+
+  /* Amber Glow Effect */
+  .glow-amber {
+    box-shadow: 
+      0 0 20px rgba(255, 176, 32, 0.3),
+      0 0 40px rgba(255, 176, 32, 0.1);
+  }
+
+  /* Text Gradient */
+  .text-gradient-cyan {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-jarvis-cyan to-jarvis-cyan-light;
+  }
+
+  .text-gradient-amber {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-jarvis-amber to-jarvis-amber-light;
+  }
+
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Ripple effect for buttons (non-vibrating devices) */
+  .ripple {
+    position: absolute;
+    border-radius: 9999px;
+    transform: scale(0);
+    background: rgba(255,255,255,0.08);
+    animation: ripple 600ms linear;
+    pointer-events: none;
+  }
+
+  @keyframes ripple {
+    to { transform: scale(4); opacity: 0; }
+  }
+}
