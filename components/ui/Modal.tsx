@@ -41,14 +41,15 @@ export const Modal: React.FC<ModalProps> = ({
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="glass-glow max-w-lg w-full max-h-[90vh] overflow-y-auto"
+              className="glass-glow max-w-lg w-full max-h-[90vh] overflow-y-auto focus:outline-none"
+              tabIndex={-1}
             >
               {title && (
                 <div className="flex items-center justify-between mb-6 pb-4 border-b border-jarvis-gray/20">
                   <h2 className="heading-lg">{title}</h2>
                   <button
                     onClick={onClose}
-                    className="text-jarvis-gray hover:text-jarvis-cyan transition-colors"
+                    className="text-jarvis-gray hover:text-jarvis-cyan transition-colors focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1 rounded-md"
                     aria-label="Close modal"
                   >
                     <span aria-hidden className="text-2xl">✖️</span>

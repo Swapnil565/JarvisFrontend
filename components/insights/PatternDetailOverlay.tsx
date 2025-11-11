@@ -58,7 +58,7 @@ export const PatternDetailOverlay: React.FC<PatternDetailOverlayProps> = ({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
           transition={motionTransition}
-          className="relative glass-glow max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+          className="relative glass-glow max-w-5xl w-full max-h-[90vh] overflow-y-auto focus:outline-none"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -75,7 +75,7 @@ export const PatternDetailOverlay: React.FC<PatternDetailOverlayProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="text-jarvis-gray hover:text-jarvis-cyan transition-colors p-2 text-xl"
+              className="text-jarvis-gray hover:text-jarvis-cyan transition-colors p-2 text-xl focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1 rounded-md"
               aria-label="Close"
             >
               <span aria-hidden>✖️</span>
@@ -147,7 +147,7 @@ export const PatternDetailOverlay: React.FC<PatternDetailOverlayProps> = ({
               </p>
               <button
                 onClick={onClose}
-                className="px-6 py-2 rounded-xl bg-jarvis-cyan/10 hover:bg-jarvis-cyan/20 text-jarvis-cyan transition-colors"
+                className="px-6 py-2 rounded-xl bg-jarvis-cyan/10 hover:bg-jarvis-cyan/20 text-jarvis-cyan transition-colors focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
               >
                 Got it
               </button>

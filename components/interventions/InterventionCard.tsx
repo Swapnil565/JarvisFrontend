@@ -86,7 +86,7 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
             </div>
             <button
               onClick={() => onDismiss(intervention.id)}
-              className="text-jarvis-gray hover:text-white transition-colors p-1"
+              className="text-jarvis-gray hover:text-white transition-colors p-1 focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1 rounded-md"
               aria-label="Dismiss"
             >
               <span aria-hidden className="text-lg">✖️</span>
@@ -102,7 +102,7 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
           {/* Reasoning toggle */}
           <button
             onClick={() => setShowReasoning(!showReasoning)}
-            className="text-sm text-jarvis-cyan hover:underline flex items-center gap-1"
+            className="text-sm text-jarvis-cyan hover:underline flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1 rounded-md"
           >
             {showReasoning ? '▼' : '▶'} Why am I seeing this?
           </button>
@@ -124,7 +124,7 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
           <div className="flex items-center gap-3 pt-2">
             <button
               onClick={() => setShowSnoozeOptions(!showSnoozeOptions)}
-              className="px-4 py-2 rounded-xl bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60 text-jarvis-gray hover:text-white transition-all text-sm"
+              className="px-4 py-2 rounded-xl bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60 text-jarvis-gray hover:text-white transition-all text-sm focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
             >
               ⏰ Snooze
             </button>
@@ -135,7 +135,7 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
                   onAction(intervention.id, 'acknowledged');
                   onDismiss(intervention.id);
                 }}
-                className="px-4 py-2 rounded-xl bg-jarvis-cyan/10 hover:bg-jarvis-cyan/20 text-jarvis-cyan transition-all text-sm font-medium"
+                className="px-4 py-2 rounded-xl bg-jarvis-cyan/10 hover:bg-jarvis-cyan/20 text-jarvis-cyan transition-all text-sm font-medium focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
               >
                 Got it 👍
               </button>
@@ -161,7 +161,7 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
                     onSnooze(intervention.id, option.hours);
                     setShowSnoozeOptions(false);
                   }}
-                  className="px-3 py-2 rounded-lg bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60 text-jarvis-gray hover:text-white transition-all text-sm"
+                  className="px-3 py-2 rounded-lg bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60 text-jarvis-gray hover:text-white transition-all text-sm focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
                 >
                   {option.label}
                 </button>

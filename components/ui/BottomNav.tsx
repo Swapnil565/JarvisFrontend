@@ -20,7 +20,11 @@ export const BottomNav: React.FC = () => {
         {items.map((it) => {
           const active = pathname === it.href;
           return (
-            <Link key={it.href} href={it.href} className={`flex flex-col items-center text-center px-3 py-2 rounded-lg ${active ? 'text-jarvis-cyan' : 'text-jarvis-soft-gray'}`}>
+            <Link
+              key={it.href}
+              href={it.href}
+              className={`flex flex-col items-center text-center px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1 ${active ? 'text-jarvis-cyan' : 'text-jarvis-soft-gray'}`}
+            >
               <span className="text-xl">{it.emoji}</span>
               <span className="text-xs mt-1">{it.label}</span>
             </Link>
