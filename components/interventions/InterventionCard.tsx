@@ -89,9 +89,7 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
               className="text-jarvis-gray hover:text-white transition-colors p-1"
               aria-label="Dismiss"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <span aria-hidden className="text-lg">✖️</span>
             </button>
           </div>
 
