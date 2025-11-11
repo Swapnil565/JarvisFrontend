@@ -23,8 +23,23 @@ export const Card: React.FC<CardProps> = ({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={motionTransition}
-      className={`${cardClass} ${clickable ? 'cursor-pointer hover:scale-[1.04] transition-transform' : ''} ${className}`}
-      {...(rest as any)}
+      className={`${cardClass} ${clickable ? 'cursor-pointer hover:scale-[1.04] transition-transform focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1' : ''} ${className}`}
+      {...(clickable
+        ? {
+            role: (rest as any).role || 'button',
+            tabIndex: (rest as any).tabIndex ?? 0,
+            onKeyDown: (e: React.KeyboardEvent) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const fn = (rest as any).onClick as (() => void) | undefined;
+                fn && fn();
+              }
+              // Forward any provided onKeyDown
+              (rest as any).onKeyDown && (rest as any).onKeyDown(e);
+            },
+            ...rest,
+          }
+        : rest as any)}
     >
       {children}
     </motion.div>

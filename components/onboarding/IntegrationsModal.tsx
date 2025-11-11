@@ -13,13 +13,13 @@ export const IntegrationsModal: React.FC<{ open: boolean; onClose: () => void }>
         <p className="text-sm text-jarvis-soft-gray mb-4">Connecting makes it faster, but it isn't required. You can add integrations later in Settings.</p>
 
         <div className="space-y-3">
-          <button className="w-full px-4 py-3 rounded-lg bg-white/5 text-white">Connect Google Fit</button>
-          <button className="w-full px-4 py-3 rounded-lg bg-white/5 text-white">Connect Apple Health</button>
-          <button className="w-full px-4 py-3 rounded-lg bg-white/5 text-white">Connect Strava</button>
+          <button className="w-full px-4 py-3 rounded-lg bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1">Connect Google Fit</button>
+          <button className="w-full px-4 py-3 rounded-lg bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1">Connect Apple Health</button>
+          <button className="w-full px-4 py-3 rounded-lg bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1">Connect Strava</button>
         </div>
 
         <div className="mt-4 flex justify-end">
-          <button onClick={onClose} className="text-sm text-jarvis-soft-gray">Close</button>
+          <button onClick={onClose} className="text-sm text-jarvis-soft-gray focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1">Close</button>
         </div>
       </div>
     </div>

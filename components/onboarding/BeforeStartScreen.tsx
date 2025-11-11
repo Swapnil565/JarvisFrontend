@@ -29,25 +29,25 @@ export const BeforeStartScreen: React.FC<{ onNext: (data?: any) => void; onBack:
       <div className="flex gap-3">
         <button
           onClick={() => onNext()}
-          className="px-4 py-3 rounded-lg bg-jarvis-electric-cyan text-jarvis-deep-navy font-medium"
+          className="px-4 py-3 rounded-lg bg-jarvis-electric-cyan text-jarvis-deep-navy font-medium focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
         >
           Let's go
         </button>
 
         <button
           onClick={() => onNext({ skippedIntegration: true })}
-          className="px-4 py-3 rounded-lg bg-jarvis-deep-navy/50 text-jarvis-soft-gray font-medium border border-jarvis-soft-gray/10"
+          className="px-4 py-3 rounded-lg bg-jarvis-deep-navy/50 text-jarvis-soft-gray font-medium border border-jarvis-soft-gray/10 focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
         >
           Skip — I'll log manually
         </button>
       </div>
 
       <div className="mt-4 text-xs text-jarvis-soft-gray">
-        <button onClick={() => onNext({ openIntegrations: true })} className="underline">Want to connect accounts? (optional)</button>
+  <button onClick={() => onNext({ openIntegrations: true })} className="underline focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1">Want to connect accounts? (optional)</button>
       </div>
 
       <div className="mt-6 text-xs text-jarvis-soft-gray">
-        <button onClick={onBack} className="text-sm text-jarvis-soft-gray hover:text-white">← Back</button>
+  <button onClick={onBack} className="text-sm text-jarvis-soft-gray hover:text-white focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1">← Back</button>
       </div>
     </motion.div>
   );
