@@ -131,6 +131,12 @@
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
   }
+
+  /* Onboarding progress bar fill using CSS variable --w */
+  .progress-fill {
+    width: var(--w, 0%);
+    transition: width 280ms ease;
+  }
 }
 
 @layer utilities {

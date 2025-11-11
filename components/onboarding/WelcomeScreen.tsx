@@ -16,8 +16,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onNext }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.12, duration: 0.35 }}
       >
-        <h1 className="heading-lg mb-2">Welcome — I’m JARVIS.</h1>
-        <p className="text-sm text-jarvis-gray max-w-lg mx-auto mb-6">I help you spot patterns in your training, work, and recovery.</p>
+  <h1 className="heading-lg mb-2">Hey — I’m JARVIS. I got your back.</h1>
+  <p className="text-sm text-jarvis-gray max-w-lg mx-auto mb-6">Quick setup: tell me a few things and I’ll spot patterns between your training, work, and recovery.</p>
       </motion.div>
 
       <motion.div

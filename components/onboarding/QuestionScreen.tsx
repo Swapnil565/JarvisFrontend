@@ -20,6 +20,8 @@ interface QuestionScreenProps {
   onNext: (data: Partial<OnboardingData>) => void;
   onBack: () => void;
   autoAdvance?: boolean;
+  questionIndex?: number;
+  totalQuestions?: number;
 }
 
 export const QuestionScreen: React.FC<QuestionScreenProps> = ({
@@ -30,6 +32,8 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({
   onNext,
   onBack
   ,autoAdvance = true
+  ,questionIndex = 0
+  ,totalQuestions = 0
 }) => {
   const [selectedValue, setSelectedValue] = useState<string>('');
   const [rationale, setRationale] = useState<string>('');
@@ -52,8 +56,21 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="text-center mb-12"
+        className="text-center mb-6"
       >
+        {totalQuestions > 0 && (
+          <div className="mb-3 max-w-md mx-auto">
+            <div className="h-2 bg-white/6 rounded-full overflow-hidden">
+              <div
+                  className="h-full bg-jarvis-cyan progress-fill"
+                  style={{ ['--w' as any]: `${((questionIndex + 1) / Math.max(1, totalQuestions)) * 100}%` }}
+                  aria-hidden
+                />
+            </div>
+            <div className="text-xs text-jarvis-soft-gray mt-2">Question {questionIndex + 1} of {totalQuestions}</div>
+          </div>
+        )}
+
         <h1 className="heading-xl mb-3">{question}</h1>
         <p className="text-jarvis-gray text-lg">{subtitle}</p>
       </motion.div>

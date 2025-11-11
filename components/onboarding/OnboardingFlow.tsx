@@ -67,8 +67,9 @@ export const OnboardingFlow: React.FC = () => {
       'lifting',
       'stress',
       'sleep',
-      'work',
+      // show hypothesis early (after question 3) so users get an immediate working theory
       'hypothesis',
+      'work',
       'morningCheckIn'
     ];
 
@@ -159,6 +160,8 @@ export const OnboardingFlow: React.FC = () => {
               dataKey="liftingFrequency"
               onNext={handleNext}
               onBack={handleBack}
+              questionIndex={0}
+              totalQuestions={4}
             />
           )}
           {currentStep === 'stress' && (
@@ -174,6 +177,8 @@ export const OnboardingFlow: React.FC = () => {
               dataKey="stressLevel"
               onNext={handleNext}
               onBack={handleBack}
+              questionIndex={1}
+              totalQuestions={4}
             />
           )}
           {currentStep === 'sleep' && (
@@ -189,6 +194,8 @@ export const OnboardingFlow: React.FC = () => {
               dataKey="sleepQuality"
               onNext={handleNext}
               onBack={handleBack}
+              questionIndex={2}
+              totalQuestions={4}
             />
           )}
           {currentStep === 'work' && (
@@ -204,6 +211,8 @@ export const OnboardingFlow: React.FC = () => {
               dataKey="workIntensity"
               onNext={handleNext}
               onBack={handleBack}
+              questionIndex={3}
+              totalQuestions={4}
             />
           )}
           {currentStep === 'hypothesis' && (
