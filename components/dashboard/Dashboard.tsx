@@ -209,7 +209,7 @@ export const Dashboard: React.FC = () => {
           transition={{ delay: 0.4 }}
           className="flex flex-col items-stretch gap-4"
         >
-          <div className="glass-card p-4 cursor-pointer" onClick={() => window.location.href = '/log'}>
+          <Card onClick={() => window.location.href = '/log'} className="p-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-jarvis-cyan/15 flex items-center justify-center">
                 <span className="text-2xl">🎤</span>
@@ -220,7 +220,7 @@ export const Dashboard: React.FC = () => {
               </div>
               <div className="text-jarvis-cyan font-medium">Hold to record</div>
             </div>
-          </div>
+          </Card>
 
           <div className="flex items-center gap-4">
             <Button onClick={handleLogSomething} variant="secondary" className="flex-1 px-8 py-3">
