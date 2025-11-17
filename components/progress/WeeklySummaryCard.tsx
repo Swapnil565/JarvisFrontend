@@ -61,8 +61,7 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
                 {summary.physical.average.toFixed(1)}
               </span>
               <span 
-                className="text-xs font-medium"
-                style={{ color: getChangeColor(summary.physical.change) }}
+                className={`text-xs font-medium ${summary.physical.change > 0 ? 'text-jarvis-muted-green' : summary.physical.change < 0 ? 'text-jarvis-warm-amber' : 'text-jarvis-gray'}`}
               >
                 {getChangeEmoji(summary.physical.change)} {Math.abs(summary.physical.change).toFixed(1)}
               </span>
@@ -90,8 +89,7 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
                 {summary.mental.average.toFixed(1)}
               </span>
               <span 
-                className="text-xs font-medium"
-                style={{ color: getChangeColor(summary.mental.change) }}
+                className={`text-xs font-medium ${summary.mental.change > 0 ? 'text-jarvis-muted-green' : summary.mental.change < 0 ? 'text-jarvis-warm-amber' : 'text-jarvis-gray'}`}
               >
                 {getChangeEmoji(summary.mental.change)} {Math.abs(summary.mental.change).toFixed(1)}
               </span>
@@ -119,8 +117,7 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
                 {summary.spiritual.average.toFixed(1)}
               </span>
               <span 
-                className="text-xs font-medium"
-                style={{ color: getChangeColor(summary.spiritual.change) }}
+                className={`text-xs font-medium ${summary.spiritual.change > 0 ? 'text-jarvis-muted-green' : summary.spiritual.change < 0 ? 'text-jarvis-warm-amber' : 'text-jarvis-gray'}`}
               >
                 {getChangeEmoji(summary.spiritual.change)} {Math.abs(summary.spiritual.change).toFixed(1)}
               </span>

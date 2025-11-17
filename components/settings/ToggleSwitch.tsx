@@ -39,7 +39,7 @@ export default function ToggleSwitch({
           enabled ? 'bg-jarvis-electric-cyan' : 'bg-jarvis-soft-gray/20'
         }`}
         role="switch"
-        aria-checked={enabled ? "true" : "false"}
+        aria-checked={enabled}
         aria-label={label}
       >
         <motion.div

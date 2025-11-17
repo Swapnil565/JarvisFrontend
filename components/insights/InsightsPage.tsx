@@ -2,8 +2,12 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { popIn, slideUp, staggerChildren, childFade } from '@/lib/animations';
 import { Container, PageLayout } from '@/components/ui';
+import { copy } from '@/lib/copy';
 import { PatternCard } from '@/components/insights/PatternCard';
+import { NarrativeCard, NarrativeInsight } from '@/components/insights/NarrativeCard';
+import { NarrativeDetailOverlay } from '@/components/insights/NarrativeDetailOverlay';
 import { PatternDetailOverlay } from '@/components/insights/PatternDetailOverlay';
 import { Pattern, PatternFilters } from '@/types/pattern';
 
@@ -111,6 +115,7 @@ export const InsightsPage: React.FC = () => {
     type: 'all'
   });
   const [selectedPattern, setSelectedPattern] = useState<Pattern | null>(null);
+  const [selectedNarrative, setSelectedNarrative] = useState<NarrativeInsight | null>(null);
 
   const filteredPatterns = mockPatterns.filter(pattern => {
     if (filters.dimension !== 'all' && pattern.dimension !== filters.dimension) {
@@ -122,27 +127,81 @@ export const InsightsPage: React.FC = () => {
     return true;
   });
 
+  // Narrative snapshot mock data (will be API-driven later)
+  const narrativeInsights: NarrativeInsight[] = [
+    {
+      id: 'n1',
+      emoji: '🧠',
+      title: 'Focus slump follows meeting marathons',
+      daySpan: 'Days 30–36',
+      summary: 'Across the last 7 days, every afternoon with 3+ stacked meetings led to a 25–40% drop in reported focus and mental clarity.',
+      highlight: 'Protect one deep-work block before noon.',
+      trendLabel: 'Focus declining',
+      trendEmoji: '📉'
+    },
+    {
+      id: 'n2',
+      emoji: '💪',
+      title: 'Stable energy on training mornings',
+      daySpan: 'Days 22–28',
+      summary: 'Morning resistance training correlates with smoother mood regulation the rest of the day—even on higher stress inputs.',
+      highlight: 'Training acts as a nervous system stabilizer.',
+      trendLabel: 'Energy improving',
+      trendEmoji: '📈'
+    },
+    {
+      id: 'n3',
+      emoji: '✨',
+      title: 'Evening decompression reduces sleep volatility',
+      daySpan: 'Days 18–24',
+      summary: 'On nights where a 10–15 min wind-down was logged, sleep duration variance narrowed and subjective recovery scored higher next morning.',
+      highlight: 'Micro wind-down protects sleep quality.',
+      trendLabel: 'Sleep stabilizing',
+      trendEmoji: '➡️'
+    }
+  ];
+
   return (
     <PageLayout>
-      <Container size="lg" className="py-8">
+  <Container size="lg" className="py-12">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          variants={popIn}
+          initial="hidden"
+          animate="visible"
+          className="mb-12"
         >
-          <h1 className="heading-xl mb-3">Your Patterns 🔍</h1>
-          <p className="text-jarvis-gray text-lg">
-            Insights discovered from your data. Tap any card to dive deeper.
-          </p>
+          <h1 className="heading-xl mb-3">{copy.insights.patternsHeadline}</h1>
+          <p className="text-body-lg">{copy.insights.patternsSub}</p>
+        </motion.div>
+
+        {/* Narrative Highlights */}
+        <motion.div
+          variants={staggerChildren(0.08)}
+          initial="hidden"
+          animate="animate"
+          className="mb-12 space-y-6"
+        >
+          <h2 className="heading-md mb-2">{copy.insights.snapshotsHeadline}</h2>
+          <p className="text-xs text-jarvis-soft-gray mb-6">{copy.insights.snapshotsSub}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {narrativeInsights.map(n => (
+              <motion.div key={n.id} variants={childFade}>
+                <NarrativeCard
+                  insight={n}
+                  onOpen={() => setSelectedNarrative(n)}
+                />
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* Filters */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="flex flex-wrap gap-3 mb-8"
+          variants={slideUp}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-wrap gap-4 mb-12"
         >
           {/* Dimension filters */}
           <div className="flex gap-2">
@@ -181,18 +240,13 @@ export const InsightsPage: React.FC = () => {
 
         {/* Pattern grid */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={staggerChildren(0.05)}
+          initial="hidden"
+          animate="animate"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {filteredPatterns.map((pattern, index) => (
-            <motion.div
-              key={pattern.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + index * 0.05 }}
-            >
+            <motion.div key={pattern.id} variants={childFade}>
               <PatternCard
                 pattern={pattern}
                 onClick={() => setSelectedPattern(pattern)}
@@ -205,14 +259,14 @@ export const InsightsPage: React.FC = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-16"
+            className="text-center py-20"
           >
-            <p className="text-jarvis-gray text-lg">No patterns found with these filters</p>
+            <p className="text-body-lg">{copy.insights.emptyState}</p>
             <button
               onClick={() => setFilters({ dimension: 'all', type: 'all' })}
               className="mt-4 text-jarvis-cyan hover:underline"
             >
-              Clear filters
+              {copy.insights.clearFilters}
             </button>
           </motion.div>
         )}
@@ -223,6 +277,13 @@ export const InsightsPage: React.FC = () => {
         <PatternDetailOverlay
           pattern={selectedPattern}
           onClose={() => setSelectedPattern(null)}
+        />
+      )}
+
+      {selectedNarrative && (
+        <NarrativeDetailOverlay
+          insight={selectedNarrative}
+          onClose={() => setSelectedNarrative(null)}
         />
       )}
     </PageLayout>

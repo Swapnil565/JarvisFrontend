@@ -6,6 +6,7 @@ import { PageLayout, Modal } from '@/components/ui';
 import { MorningMoodFlow } from '@/components/logging/MorningMoodFlow';
 import { QuickLogFlow } from '@/components/logging/QuickLogFlow';
 import { EndOfDayFlow } from '@/components/logging/EndOfDayFlow';
+import { VoiceLog } from '@/components/logging/VoiceLog';
 
 type LogType = 'morning' | 'quick' | 'endofday' | null;
 
@@ -44,6 +45,12 @@ export default function LogPage() {
     router.push('/dashboard');
   };
 
+  const handleVoiceLogComplete = (data: { transcript: string; tags: string[] }) => {
+    console.log('Voice log:', data);
+    // TODO: Send to API in Phase 9
+    router.push('/dashboard');
+  };
+
   const handleEndOfDayComplete = (data: Record<string, string>) => {
     console.log('End of day:', data);
     // TODO: Send to API in Phase 9
@@ -60,7 +67,7 @@ export default function LogPage() {
         <MorningMoodFlow onComplete={handleMorningComplete} onSkip={handleSkip} />
       )}
       {logType === 'quick' && (
-        <QuickLogFlow onComplete={handleQuickLogComplete} onCancel={handleSkip} />
+        <VoiceLog onComplete={handleVoiceLogComplete} onCancel={handleSkip} />
       )}
       {logType === 'endofday' && (
         <EndOfDayFlow onComplete={handleEndOfDayComplete} onSkip={handleSkip} />

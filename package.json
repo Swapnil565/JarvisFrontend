@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "smoke-check": "node ./scripts/smoke-check.js",
+    "a11y-check": "node ./scripts/a11y-check.js",
+    "snapshot": "git tag -a v0.1.0-alpha -m 'Frontend polish complete: UI consistency, a11y, voice logging, mobile testing ready' && git push origin v0.1.0-alpha",
     "test": "vitest"
   },
   "dependencies": {
@@ -40,6 +42,7 @@
     "eslint": "^8.53.0",
     "eslint-config-next": "14.0.0",
     "jsdom": "^22.1.0",
+    "pa11y": "^9.0.1",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.2.2",

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Container, PageLayout, Button, Card } from '@/components/ui';
 import { DimensionCard } from '@/components/dashboard/DimensionCard';
+import { copy } from '@/lib/copy';
 import { StreakCounter } from '@/components/dashboard/StreakCounter';
 import { QuickMoodCheck } from '@/components/dashboard/QuickMoodCheck';
 
@@ -49,16 +50,16 @@ export const Dashboard: React.FC = () => {
 
   return (
     <PageLayout>
-      <Container size="lg" className="py-8">
+  <Container size="lg" className="py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="heading-lg">Welcome back</h1>
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="heading-lg">{copy.dashboard.welcomeHeadline}</h1>
+            <div className="flex items-center gap-4">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -100,7 +101,7 @@ export const Dashboard: React.FC = () => {
               </motion.button>
             </div>
           </div>
-          <p className="text-jarvis-gray">Here's where you stand today</p>
+          <p className="text-body">{copy.dashboard.todayIntro}</p>
         </motion.div>
 
         {/* Mood selector (prominent) */}
@@ -110,12 +111,12 @@ export const Dashboard: React.FC = () => {
           transition={{ delay: 0.05 }}
           className="mb-6"
         >
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="heading-md">Morning. How we feeling?</h2>
-            <p className="text-sm text-jarvis-gray">Quick check-in</p>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="heading-md">{copy.dashboard.moodPromptMorning}</h2>
+            <p className="text-xs text-jarvis-gray">{copy.dashboard.moodQuickCheck}</p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {[
               { emoji: '🔥', label: "Let's go" },
               { emoji: '😌', label: 'Good' },
@@ -144,34 +145,34 @@ export const Dashboard: React.FC = () => {
           transition={{ delay: 0.12 }}
           className="mb-8"
         >
-          <div className="glass-card p-6">
+          <div className="glass-card p-8">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold">Today's Status</h3>
-                <p className="text-sm text-jarvis-gray mt-1">You hit 2/3 dimensions</p>
+                <h3 className="heading-sm font-semibold">{copy.dashboard.statusHeadline}</h3>
+                <p className="text-xs text-jarvis-gray mt-1">You hit 2/3 dimensions</p>
               </div>
               <div className="text-right">
-                <div className="text-sm text-jarvis-cyan font-medium">Streak: 4 days</div>
-                <div className="text-xs text-jarvis-gray mt-1">Longest: 28 days</div>
+                <div className="text-xs text-jarvis-cyan font-medium">Streak: 4 days</div>
+                <div className="text-[10px] text-jarvis-gray mt-1">Longest: 28 days</div>
               </div>
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-4">
+            <div className="mt-8 grid grid-cols-3 gap-6">
               <div className="flex flex-col items-start gap-2">
-                <div className="text-sm text-jarvis-gray">Workout</div>
-                <div className="text-base font-medium">✗</div>
+                <div className="text-xs text-jarvis-gray">Workout</div>
+                <div className="text-sm font-medium">✗</div>
               </div>
               <div className="flex flex-col items-start gap-2">
-                <div className="text-sm text-jarvis-gray">Tasks</div>
-                <div className="text-base font-medium">2/3</div>
+                <div className="text-xs text-jarvis-gray">Tasks</div>
+                <div className="text-sm font-medium">2/3</div>
               </div>
               <div className="flex flex-col items-start gap-2">
-                <div className="text-sm text-jarvis-gray">Meditation</div>
-                <div className="text-base font-medium">✗</div>
+                <div className="text-xs text-jarvis-gray">Meditation</div>
+                <div className="text-sm font-medium">✗</div>
               </div>
             </div>
 
-            <div className="mt-4 text-sm text-jarvis-gray">I'll keep watching for patterns and nudge you when it matters.</div>
+            <div className="mt-8 text-xs text-jarvis-gray">{copy.dashboard.statusFooter}</div>
           </div>
         </motion.div>
 
@@ -180,7 +181,7 @@ export const Dashboard: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12"
         >
           <DimensionCard
             dimension="physical"
@@ -210,39 +211,39 @@ export const Dashboard: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="flex flex-col items-stretch gap-4"
+          className="flex flex-col items-stretch gap-8"
         >
-          <Card onClick={() => window.location.href = '/log'} className="p-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-jarvis-cyan/15 flex items-center justify-center">
+  <Card onClick={() => router.push('/log')} className="p-6">
+            <div className="flex items-center gap-6">
+              <div className="w-14 h-14 rounded-xl bg-jarvis-cyan/15 flex items-center justify-center">
                 <span className="text-2xl">🎤</span>
               </div>
-              <div className="flex-1 text-left">
-                <div className="font-medium">Voice Log</div>
-                <div className="text-sm text-jarvis-gray">Hold to speak — quick and easy</div>
+              <div className="flex-1 text-left space-y-1">
+                <div className="text-sm font-medium">{copy.dashboard.voiceLogTitle}</div>
+                <div className="text-xs text-jarvis-gray">{copy.dashboard.voiceLogSubtitle}</div>
               </div>
-              <div className="text-jarvis-cyan font-medium">Hold to record</div>
+              <div className="text-[11px] text-jarvis-cyan font-medium">{copy.dashboard.voiceLogCTA}</div>
             </div>
           </Card>
 
-          <div className="flex items-center gap-4">
-            <Button onClick={handleLogSomething} variant="secondary" className="flex-1 px-8 py-3">
-              Log manually
+          <div className="flex items-center gap-6">
+            <Button onClick={handleLogSomething} variant="secondary" className="flex-1 px-8 py-4">
+              {copy.dashboard.manualLog}
             </Button>
 
             {!showMoodCheck && (
               <button
                 onClick={() => setShowMoodCheck(true)}
-                className="text-sm text-jarvis-gray hover:text-jarvis-cyan transition-colors"
+                className="text-sm text-jarvis-gray hover:text-jarvis-cyan transition-colors mt-1"
               >
-                or quick mood check
+                {copy.dashboard.quickMoodLink}
               </button>
             )}
           </div>
         </motion.div>
 
         {/* Bottom spacing */}
-        <div className="h-8" />
+  <div className="h-12" />
       </Container>
     </PageLayout>
   );

@@ -47,6 +47,7 @@ export default function TrendChart({ dimension, dataPoints, currentScore, trend 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ...motionTransition, duration: 0.4 }}
+      style={{ ['--accent' as any]: config.color, ['--trend' as any]: trendColor }}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
@@ -57,7 +58,7 @@ export default function TrendChart({ dimension, dataPoints, currentScore, trend 
               {config.name}
             </h3>
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-3xl font-bold" style={{ color: config.color }}>
+              <span className="text-3xl font-bold text-[color:var(--accent)]">
                 {currentScore.toFixed(1)}
               </span>
               <span className="text-sm text-jarvis-soft-gray">/10</span>
@@ -66,9 +67,9 @@ export default function TrendChart({ dimension, dataPoints, currentScore, trend 
         </div>
         
         {/* Trend indicator */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-jarvis-deep-navy/50">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-jarvis-deep-navy/50">
           <span className="text-lg">{trendEmoji}</span>
-          <span className="text-sm font-medium capitalize" style={{ color: trendColor }}>
+          <span className="text-sm font-medium capitalize text-[color:var(--trend)]">
             {trend}
           </span>
         </div>

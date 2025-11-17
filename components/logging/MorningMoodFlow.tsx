@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Card } from '@/components/ui';
 import { motionTransition, hoverSpring, tapSpring } from '@/lib/motion';
+import { copy } from '@/lib/copy';
 
 const moods = [
   { emoji: '😊', label: 'Great', value: 5, description: "I'm crushing it" },
@@ -57,8 +58,8 @@ export const MorningMoodFlow: React.FC<MorningMoodFlowProps> = ({
             transition={motionTransition}
           >
             <div className="text-center mb-8">
-              <h1 className="heading-xl mb-3">Good morning ☀️</h1>
-              <p className="text-jarvis-gray text-lg">How are you feeling today?</p>
+              <h1 className="heading-xl mb-3">{copy.morning.greeting}</h1>
+              <p className="text-body-lg">{copy.morning.prompt}</p>
             </div>
 
             <div className="grid grid-cols-5 gap-4 mb-6">
@@ -78,8 +79,8 @@ export const MorningMoodFlow: React.FC<MorningMoodFlowProps> = ({
                   }`}
                 >
                   <span className="text-4xl">{mood.emoji}</span>
-                  <span className="text-sm font-medium">{mood.label}</span>
-                  <span className="text-xs text-jarvis-gray text-center">{mood.description}</span>
+                  <span className="text-xs font-medium">{mood.label}</span>
+                  <span className="text-[11px] text-jarvis-gray text-center">{mood.description}</span>
                 </motion.button>
               ))}
             </div>
@@ -89,7 +90,7 @@ export const MorningMoodFlow: React.FC<MorningMoodFlowProps> = ({
                 onClick={onSkip}
                 className="text-sm text-jarvis-gray hover:text-jarvis-cyan transition-colors"
               >
-                Skip for now
+                {copy.morning.skipForNow}
               </button>
             </div>
           </motion.div>
@@ -110,15 +111,15 @@ export const MorningMoodFlow: React.FC<MorningMoodFlowProps> = ({
               >
                 {moods.find(m => m.value === selectedMood)?.emoji}
               </motion.div>
-              <h2 className="heading-lg mb-3">Want to add context?</h2>
-              <p className="text-jarvis-gray">Optional—but helps me spot patterns</p>
+              <h2 className="heading-md mb-3">{copy.morning.wantContext}</h2>
+              <p className="text-body">{copy.morning.optionalHelps}</p>
             </div>
 
             <Card className="mb-6">
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="What's on your mind? (e.g., 'didn't sleep well' or 'excited about today')"
+                placeholder={copy.morning.notesPlaceholder}
                 className="w-full bg-transparent border-none text-white placeholder:text-jarvis-gray focus:outline-none resize-none"
                 rows={4}
                 autoFocus
@@ -127,13 +128,13 @@ export const MorningMoodFlow: React.FC<MorningMoodFlowProps> = ({
 
             <div className="flex gap-4">
               <Button onClick={() => setStep('mood')} variant="ghost" className="flex-1">
-                Back
+                {copy.morning.back}
               </Button>
               <Button onClick={handleSkipNotes} variant="secondary" className="flex-1">
-                Skip
+                {copy.morning.skip}
               </Button>
               <Button onClick={handleSubmit} variant="primary" className="flex-1">
-                Done 🔥
+                {copy.morning.done}
               </Button>
             </div>
           </motion.div>
