@@ -1,36 +1,59 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
+import QRCode from "qrcode";
 
 type Props = {
   searchParams?: { u?: string };
 };
 
 export default function QRPage({ searchParams }: Props) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
   // If a URL is passed via ?u=, use it; otherwise, fall back to the most recent tunnel URL.
   const fallbackUrl = "https://seeks-productivity-imports-math.trycloudflare.com";
   const url = (searchParams?.u && decodeURIComponent(searchParams.u)) || fallbackUrl;
-  const encoded = encodeURIComponent(url);
 
-  // Google Chart API to render a QR code image for the URL
-  const qrSrc = `https://chart.googleapis.com/chart?cht=qr&chs=320x320&chl=${encoded}&choe=UTF-8`;
+  useEffect(() => {
+    if (canvasRef.current) {
+      QRCode.toCanvas(
+        canvasRef.current,
+        url,
+        {
+          width: 320,
+          margin: 2,
+          color: {
+            dark: "#000000",
+            light: "#FFFFFF",
+          },
+        },
+        (error) => {
+          if (error) console.error("QR generation error:", error);
+        }
+      );
+    }
+  }, [url]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-black/40">
-      <div className="glass-card glass-glow p-6 rounded-2xl text-center space-y-4">
-        <h1 className="text-2xl font-semibold">Scan to open on phone</h1>
-        <p className="text-sm opacity-80 break-all">{url}</p>
-        <div className="mx-auto w-[320px] h-[320px] bg-white rounded-xl flex items-center justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={qrSrc}
-            alt={`QR code for ${url}`}
-            width={320}
-            height={320}
-            className="rounded-lg"
-          />
+    <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e]">
+      <div className="glass-card glass-glow p-8 rounded-2xl text-center space-y-6 max-w-md">
+        <div>
+          <h1 className="heading-lg mb-2">📱 Scan to open</h1>
+          <p className="body-sm opacity-70">Point your phone camera at the QR code</p>
         </div>
-        <p className="text-xs opacity-70">
-          Tip: If the link changes, append ?u= to this page with the new URL to regenerate the QR.
-        </p>
+        
+        <div className="mx-auto w-[320px] h-[320px] bg-white rounded-2xl p-4 flex items-center justify-center">
+          <canvas ref={canvasRef} className="max-w-full max-h-full" />
+        </div>
+        
+        <div className="space-y-2">
+          <p className="body-sm opacity-80 break-all font-mono text-xs bg-white/5 p-3 rounded-lg">
+            {url}
+          </p>
+          <p className="text-xs opacity-60">
+            💡 Tip: Change URL with ?u= parameter
+          </p>
+        </div>
       </div>
     </div>
   );
