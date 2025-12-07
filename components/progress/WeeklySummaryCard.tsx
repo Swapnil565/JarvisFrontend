@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { WeeklySummary } from '@/types/progress';
+import { TrendingUp, TrendingDown, ArrowRight, Activity, Brain, Sparkles, MessageCircle, Flame } from 'lucide-react';
 
 interface WeeklySummaryCardProps {
   summary: WeeklySummary;
@@ -22,10 +23,10 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
     return '#8B95A5';
   };
 
-  const getChangeEmoji = (change: number) => {
-    if (change > 0) return '↗️';
-    if (change < 0) return '↘️';
-    return '→';
+  const ChangeIcon = ({ change }: { change: number }) => {
+    if (change > 0) return <TrendingUp size={14} />;
+    if (change < 0) return <TrendingDown size={14} />;
+    return <ArrowRight size={14} />;
   };
 
   return (
@@ -45,7 +46,7 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-jarvis-deep-navy/50">
           <span className="text-sm text-jarvis-soft-gray">{summary.totalLogs} logs</span>
-          {summary.streakMaintained && <span className="text-sm">🔥</span>}
+          {summary.streakMaintained && <Flame size={14} className="text-orange-500" />}
         </div>
       </div>
 
@@ -53,7 +54,7 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
       <div className="space-y-4">
         {/* Physical */}
         <div className="flex items-start gap-3">
-          <span className="text-2xl">💪</span>
+          <Activity size={24} className="text-jarvis-cyan" />
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-sm font-medium text-white">Physical</span>
@@ -61,19 +62,19 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
                 {summary.physical.average.toFixed(1)}
               </span>
               <span 
-                className={`text-xs font-medium ${summary.physical.change > 0 ? 'text-jarvis-muted-green' : summary.physical.change < 0 ? 'text-jarvis-warm-amber' : 'text-jarvis-gray'}`}
+                className={`text-xs font-medium flex items-center gap-1 ${summary.physical.change > 0 ? 'text-jarvis-muted-green' : summary.physical.change < 0 ? 'text-jarvis-warm-amber' : 'text-jarvis-gray'}`}
               >
-                {getChangeEmoji(summary.physical.change)} {Math.abs(summary.physical.change).toFixed(1)}
+                <ChangeIcon change={summary.physical.change} /> {Math.abs(summary.physical.change).toFixed(1)}
               </span>
             </div>
             {summary.physical.highlight && (
-              <p className="text-xs text-jarvis-soft-gray">
-                ✨ {summary.physical.highlight}
+              <p className="text-xs text-jarvis-soft-gray flex items-center gap-1">
+                <Sparkles size={12} /> {summary.physical.highlight}
               </p>
             )}
             {summary.physical.lowlight && (
-              <p className="text-xs text-jarvis-soft-gray/70">
-                💭 {summary.physical.lowlight}
+              <p className="text-xs text-jarvis-soft-gray/70 flex items-center gap-1">
+                <MessageCircle size={12} /> {summary.physical.lowlight}
               </p>
             )}
           </div>
@@ -81,7 +82,7 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
 
         {/* Mental */}
         <div className="flex items-start gap-3">
-          <span className="text-2xl">🧠</span>
+          <Brain size={24} className="text-jarvis-amber" />
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-sm font-medium text-white">Mental</span>
@@ -89,19 +90,19 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
                 {summary.mental.average.toFixed(1)}
               </span>
               <span 
-                className={`text-xs font-medium ${summary.mental.change > 0 ? 'text-jarvis-muted-green' : summary.mental.change < 0 ? 'text-jarvis-warm-amber' : 'text-jarvis-gray'}`}
+                className={`text-xs font-medium flex items-center gap-1 ${summary.mental.change > 0 ? 'text-jarvis-muted-green' : summary.mental.change < 0 ? 'text-jarvis-warm-amber' : 'text-jarvis-gray'}`}
               >
-                {getChangeEmoji(summary.mental.change)} {Math.abs(summary.mental.change).toFixed(1)}
+                <ChangeIcon change={summary.mental.change} /> {Math.abs(summary.mental.change).toFixed(1)}
               </span>
             </div>
             {summary.mental.highlight && (
-              <p className="text-xs text-jarvis-soft-gray">
-                ✨ {summary.mental.highlight}
+              <p className="text-xs text-jarvis-soft-gray flex items-center gap-1">
+                <Sparkles size={12} /> {summary.mental.highlight}
               </p>
             )}
             {summary.mental.lowlight && (
-              <p className="text-xs text-jarvis-soft-gray/70">
-                💭 {summary.mental.lowlight}
+              <p className="text-xs text-jarvis-soft-gray/70 flex items-center gap-1">
+                <MessageCircle size={12} /> {summary.mental.lowlight}
               </p>
             )}
           </div>
@@ -109,7 +110,7 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
 
         {/* Spiritual */}
         <div className="flex items-start gap-3">
-          <span className="text-2xl">✨</span>
+          <Sparkles size={24} className="text-jarvis-green" />
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-sm font-medium text-white">Spiritual</span>
@@ -117,19 +118,19 @@ export default function WeeklySummaryCard({ summary, index }: WeeklySummaryCardP
                 {summary.spiritual.average.toFixed(1)}
               </span>
               <span 
-                className={`text-xs font-medium ${summary.spiritual.change > 0 ? 'text-jarvis-muted-green' : summary.spiritual.change < 0 ? 'text-jarvis-warm-amber' : 'text-jarvis-gray'}`}
+                className={`text-xs font-medium flex items-center gap-1 ${summary.spiritual.change > 0 ? 'text-jarvis-muted-green' : summary.spiritual.change < 0 ? 'text-jarvis-warm-amber' : 'text-jarvis-gray'}`}
               >
-                {getChangeEmoji(summary.spiritual.change)} {Math.abs(summary.spiritual.change).toFixed(1)}
+                <ChangeIcon change={summary.spiritual.change} /> {Math.abs(summary.spiritual.change).toFixed(1)}
               </span>
             </div>
             {summary.spiritual.highlight && (
-              <p className="text-xs text-jarvis-soft-gray">
-                ✨ {summary.spiritual.highlight}
+              <p className="text-xs text-jarvis-soft-gray flex items-center gap-1">
+                <Sparkles size={12} /> {summary.spiritual.highlight}
               </p>
             )}
             {summary.spiritual.lowlight && (
-              <p className="text-xs text-jarvis-soft-gray/70">
-                💭 {summary.spiritual.lowlight}
+              <p className="text-xs text-jarvis-soft-gray/70 flex items-center gap-1">
+                <MessageCircle size={12} /> {summary.spiritual.lowlight}
               </p>
             )}
           </div>

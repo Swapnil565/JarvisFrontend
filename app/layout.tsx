@@ -15,16 +15,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-  <body className="min-h-screen bg-black antialiased">
+      <body className="min-h-screen antialiased">
         {children}
         <Toaster 
           theme="dark"
           position="bottom-right"
           toastOptions={{
             style: {
-              background: '#000000',
-              border: '1px solid #333333',
-              color: '#F8F9FA',
+              background: '#112235',
+              border: '1px solid rgba(0, 224, 255, 0.1)',
+              color: '#FFFFFF',
             },
           }}
         />

@@ -5,13 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Card } from '@/components/ui';
 import { motionTransition, hoverSpring, tapSpring } from '@/lib/motion';
 import { copy } from '@/lib/copy';
+import { Sun, Smile, Meh, Frown, CloudRain, LucideIcon } from 'lucide-react';
 
-const moods = [
-  { emoji: '😊', label: 'Great', value: 5, description: "I'm crushing it" },
-  { emoji: '🙂', label: 'Good', value: 4, description: 'Feeling solid' },
-  { emoji: '😐', label: 'Okay', value: 3, description: 'Just okay' },
-  { emoji: '😕', label: 'Meh', value: 2, description: 'Not great' },
-  { emoji: '😢', label: 'Rough', value: 1, description: 'Struggling today' }
+const moods: { icon: LucideIcon; label: string; value: number; description: string; color: string }[] = [
+  { icon: Sun, label: 'Great', value: 5, description: "I'm crushing it", color: 'text-jarvis-cyan' },
+  { icon: Smile, label: 'Good', value: 4, description: 'Feeling solid', color: 'text-jarvis-green' },
+  { icon: Meh, label: 'Okay', value: 3, description: 'Just okay', color: 'text-jarvis-amber' },
+  { icon: Frown, label: 'Meh', value: 2, description: 'Not great', color: 'text-orange-400' },
+  { icon: CloudRain, label: 'Rough', value: 1, description: 'Struggling today', color: 'text-red-400' }
 ];
 
 interface MorningMoodFlowProps {
@@ -78,7 +79,7 @@ export const MorningMoodFlow: React.FC<MorningMoodFlowProps> = ({
                       : 'bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60'
                   }`}
                 >
-                  <span className="text-4xl">{mood.emoji}</span>
+                  <mood.icon size={32} className={mood.color} />
                   <span className="text-xs font-medium">{mood.label}</span>
                   <span className="text-[11px] text-jarvis-gray text-center">{mood.description}</span>
                 </motion.button>
@@ -107,9 +108,12 @@ export const MorningMoodFlow: React.FC<MorningMoodFlowProps> = ({
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="text-6xl mb-4"
+                className="flex justify-center mb-4"
               >
-                {moods.find(m => m.value === selectedMood)?.emoji}
+                {(() => {
+                   const m = moods.find(m => m.value === selectedMood);
+                   return m ? <m.icon size={64} className={m.color} /> : null;
+                })()}
               </motion.div>
               <h2 className="heading-md mb-3">{copy.morning.wantContext}</h2>
               <p className="text-body">{copy.morning.optionalHelps}</p>

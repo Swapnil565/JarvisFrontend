@@ -3,13 +3,33 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { 
+  Activity, 
+  Brain, 
+  Sparkles, 
+  Mic,
+  HeartPulse,
+  Cpu,
+  Leaf,
+  Zap,
+  Lightbulb,
+  Moon,
+  Radio,
+  Waves,
+  Bell,
+  User,
+  Flame,
+  Smile,
+  Meh,
+  Frown
+} from 'lucide-react';
 import { Container, PageLayout, Button, Card } from '@/components/ui';
 import { DimensionCard } from '@/components/dashboard/DimensionCard';
 import { copy } from '@/lib/copy';
 import { StreakCounter } from '@/components/dashboard/StreakCounter';
-import { QuickMoodCheck } from '@/components/dashboard/QuickMoodCheck';
 
 export const Dashboard: React.FC = () => {
+  const streak = 7;
   const [showMoodCheck, setShowMoodCheck] = useState(false);
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [hasInterventions, setHasInterventions] = useState(true); // Mock - will come from API in Phase 9
@@ -20,19 +40,19 @@ export const Dashboard: React.FC = () => {
       status: 'good' as const,
       score: 7.5,
       insight: 'Workouts consistent. Recovery could be better.',
-      emoji: '💪'
+      icon: Activity
     },
     mental: {
       status: 'warning' as const,
       score: 6.0,
       insight: 'Focus is slipping. Consider reducing context switching.',
-      emoji: '🧠'
+      icon: Cpu
     },
     spiritual: {
       status: 'great' as const,
       score: 8.5,
       insight: 'Great balance. Keep prioritizing what matters.',
-      emoji: '✨'
+      icon: Sparkles
     }
   };
 
@@ -51,58 +71,51 @@ export const Dashboard: React.FC = () => {
   return (
     <PageLayout>
   <Container size="lg" className="py-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="heading-lg">{copy.dashboard.welcomeHeadline}</h1>
-            <div className="flex items-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => router.push('/progress')}
-                className="text-jarvis-gray hover:text-jarvis-cyan transition-colors relative text-2xl"
-                title="View Progress"
-              >
-                <span aria-hidden>📈</span>
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => router.push('/insights')}
-                className="text-jarvis-gray hover:text-jarvis-cyan transition-colors relative text-2xl"
-                title="View Insights"
-              >
-                <span aria-hidden>📊</span>
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => router.push('/interventions')}
-                className="text-jarvis-gray hover:text-jarvis-cyan transition-colors relative text-2xl"
-                title="Interventions"
-              >
-                <span aria-hidden>🔔</span>
-                {hasInterventions && (
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-jarvis-amber rounded-full border-2 border-jarvis-navy" />
-                )}
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => router.push('/settings')}
-                className="text-jarvis-gray hover:text-jarvis-cyan transition-colors text-2xl"
-                title="Settings"
-              >
-                <span aria-hidden>⚙️</span>
-              </motion.button>
-            </div>
+      {/* 1. THE HEADER (Exact Style) */}
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex justify-between items-start mb-10"
+      >
+        <div>
+          {/* The Date: Cyan, Spaced out, Uppercase */}
+          <p className="text-jarvis-cyan font-display text-[10px] tracking-[0.2em] uppercase mb-1 font-semibold">
+            Wednesday, Oct 24
+          </p>
+          
+          {/* The Greeting: Tight leading, Color contrast */}
+          <h1 className="font-display font-bold text-5xl leading-[0.95] tracking-tight">
+            <span className="text-white">Morning,</span>
+            <br />
+            {/* The Name is Grey to create visual hierarchy */}
+            <span className="text-jarvis-text-secondary">Swapnil.</span>
+          </h1>
+        </div>
+
+        {/* The Streak Badge & Actions */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-[#1A2C42] border border-white/5 px-3 py-1.5 rounded-full">
+            <Flame size={14} className="text-orange-500" />
+            <span className="font-display font-bold text-jarvis-cyan text-sm">{streak}</span>
           </div>
-          <p className="text-body">{copy.dashboard.todayIntro}</p>
-        </motion.div>
+          
+          <button 
+            onClick={() => router.push('/notifications')}
+            className="w-10 h-10 rounded-full bg-[#1A2C42] border border-white/5 flex items-center justify-center text-jarvis-text-secondary hover:text-white hover:bg-[#233b57] transition-colors"
+          >
+            <Bell size={20} strokeWidth={2} />
+          </button>
+          
+          <button 
+            onClick={() => router.push('/settings')}
+            className="w-10 h-10 rounded-full bg-[#1A2C42] border border-white/5 flex items-center justify-center text-jarvis-text-secondary hover:text-white hover:bg-[#233b57] transition-colors"
+          >
+            <User size={20} strokeWidth={2} />
+          </button>
+        </div>
+      </motion.div>
+
+
 
         {/* Mood selector (prominent) */}
         <motion.div
@@ -118,11 +131,11 @@ export const Dashboard: React.FC = () => {
 
           <div className="flex items-center gap-4">
             {[
-              { emoji: '🔥', label: "Let's go" },
-              { emoji: '😌', label: 'Good' },
-              { emoji: '😐', label: 'Meh' },
-              { emoji: '😓', label: 'Struggling' },
-              { emoji: '💤', label: 'Cooked' }
+              { icon: Flame, label: "Let's go", color: 'text-orange-500' },
+              { icon: Smile, label: 'Good', color: 'text-jarvis-cyan' },
+              { icon: Meh, label: 'Meh', color: 'text-jarvis-amber' },
+              { icon: Frown, label: 'Struggling', color: 'text-orange-400' },
+              { icon: Moon, label: 'Cooked', color: 'text-jarvis-gray' }
             ].map((m, i) => (
               <button
                 key={m.label}
@@ -131,7 +144,7 @@ export const Dashboard: React.FC = () => {
                 aria-pressed={selectedMood === i}
                 title={m.label}
               >
-                <span className="text-2xl">{m.emoji}</span>
+                <m.icon size={24} className={m.color} />
                 <span className="text-[11px] text-jarvis-gray mt-1">{m.label}</span>
               </button>
             ))}
@@ -189,6 +202,7 @@ export const Dashboard: React.FC = () => {
             score={dimensionsData.physical.score}
             insight={dimensionsData.physical.insight}
             emoji={dimensionsData.physical.emoji}
+            icon={dimensionsData.physical.icon}
           />
           <DimensionCard
             dimension="mental"
@@ -196,6 +210,7 @@ export const Dashboard: React.FC = () => {
             score={dimensionsData.mental.score}
             insight={dimensionsData.mental.insight}
             emoji={dimensionsData.mental.emoji}
+            icon={dimensionsData.mental.icon}
           />
           <DimensionCard
             dimension="spiritual"
@@ -203,43 +218,8 @@ export const Dashboard: React.FC = () => {
             score={dimensionsData.spiritual.score}
             insight={dimensionsData.spiritual.insight}
             emoji={dimensionsData.spiritual.emoji}
+            icon={dimensionsData.spiritual.icon}
           />
-        </motion.div>
-
-        {/* Primary actions: Voice Log prominent, manual log secondary */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex flex-col items-stretch gap-8"
-        >
-  <Card onClick={() => router.push('/log')} className="p-6">
-            <div className="flex items-center gap-6">
-              <div className="w-14 h-14 rounded-xl bg-jarvis-cyan/15 flex items-center justify-center">
-                <span className="text-2xl">🎤</span>
-              </div>
-              <div className="flex-1 text-left space-y-1">
-                <div className="text-sm font-medium">{copy.dashboard.voiceLogTitle}</div>
-                <div className="text-xs text-jarvis-gray">{copy.dashboard.voiceLogSubtitle}</div>
-              </div>
-              <div className="text-[11px] text-jarvis-cyan font-medium">{copy.dashboard.voiceLogCTA}</div>
-            </div>
-          </Card>
-
-          <div className="flex items-center gap-6">
-            <Button onClick={handleLogSomething} variant="secondary" className="flex-1 px-8 py-4">
-              {copy.dashboard.manualLog}
-            </Button>
-
-            {!showMoodCheck && (
-              <button
-                onClick={() => setShowMoodCheck(true)}
-                className="text-sm text-jarvis-gray hover:text-jarvis-cyan transition-colors mt-1"
-              >
-                {copy.dashboard.quickMoodLink}
-              </button>
-            )}
-          </div>
         </motion.div>
 
         {/* Bottom spacing */}

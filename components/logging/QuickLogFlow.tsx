@@ -4,12 +4,26 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Card } from '@/components/ui';
 import { motionTransition } from '@/lib/motion';
+import { 
+  BatteryFull, 
+  BatteryMedium, 
+  BatteryLow, 
+  BatteryWarning,
+  Smile, 
+  Meh, 
+  Frown, 
+  Moon, 
+  Sun, 
+  Zap, 
+  Brain,
+  LucideIcon
+} from 'lucide-react';
 
 interface Question {
   id: string;
   question: string;
   context: string;
-  options: Array<{ label: string; value: string }>;
+  options: Array<{ label: string; value: string; icon: LucideIcon }>;
 }
 
 // Smart contextual questions based on time and patterns
@@ -23,10 +37,10 @@ const getContextualQuestions = (): Question[] => {
         question: "How's your energy?",
         context: 'Just started the day',
         options: [
-          { label: '💪 Fully charged', value: 'high' },
-          { label: '🙂 Pretty good', value: 'medium' },
-          { label: '😴 Still waking up', value: 'low' },
-          { label: '🥱 Dragging', value: 'very-low' }
+          { label: 'Fully charged', value: 'high', icon: BatteryFull },
+          { label: 'Pretty good', value: 'medium', icon: BatteryMedium },
+          { label: 'Still waking up', value: 'low', icon: BatteryLow },
+          { label: 'Dragging', value: 'very-low', icon: BatteryWarning }
         ]
       },
       {
@@ -34,10 +48,10 @@ const getContextualQuestions = (): Question[] => {
         question: 'How did you sleep?',
         context: 'Last night',
         options: [
-          { label: '😴 Solid 7-9 hours', value: 'good' },
-          { label: '😐 6-7 hours, okay', value: 'okay' },
-          { label: '😕 Less than 6 hours', value: 'poor' },
-          { label: '🌙 Restless/broken', value: 'restless' }
+          { label: 'Solid 7-9 hours', value: 'good', icon: Moon },
+          { label: '6-7 hours, okay', value: 'okay', icon: Moon },
+          { label: 'Less than 6 hours', value: 'poor', icon: Moon },
+          { label: 'Restless/broken', value: 'restless', icon: Moon }
         ]
       }
     ];
@@ -48,46 +62,24 @@ const getContextualQuestions = (): Question[] => {
         question: "How's your focus been?",
         context: 'So far today',
         options: [
-          { label: '🎯 Locked in', value: 'high' },
-          { label: '✅ Getting things done', value: 'medium' },
-          { label: '😵 All over the place', value: 'low' },
-          { label: "🤯 Can't concentrate", value: 'very-low' }
-        ]
-      },
-      {
-        id: 'stress',
-        question: 'Stress level right now?',
-        context: 'Check in',
-        options: [
-          { label: '😌 Chill', value: 'low' },
-          { label: '🙂 Manageable', value: 'medium' },
-          { label: '😬 Pretty high', value: 'high' },
-          { label: '😰 Overwhelmed', value: 'very-high' }
+          { label: 'Laser focused', value: 'high', icon: Brain },
+          { label: 'Getting things done', value: 'medium', icon: Brain },
+          { label: 'Distracted', value: 'low', icon: Brain },
+          { label: 'Brain fog', value: 'very-low', icon: Brain }
         ]
       }
     ];
   } else {
     return [
       {
-        id: 'workout',
-        question: 'Did you train today?',
-        context: 'Physical activity',
+        id: 'mood',
+        question: "How was the day?",
+        context: 'Wrapping up',
         options: [
-          { label: '💪 Full session', value: 'full' },
-          { label: '🏃 Light workout', value: 'light' },
-          { label: '🚶 Just movement', value: 'movement' },
-          { label: '🛋️ Rest day', value: 'rest' }
-        ]
-      },
-      {
-        id: 'energy-evening',
-        question: 'Energy level now?',
-        context: 'End of day',
-        options: [
-          { label: '⚡ Still going strong', value: 'high' },
-          { label: '😊 Pleasantly tired', value: 'medium' },
-          { label: '😴 Running on fumes', value: 'low' },
-          { label: '🔋 Completely drained', value: 'empty' }
+          { label: 'Great day', value: 'great', icon: Smile },
+          { label: 'Good', value: 'good', icon: Smile },
+          { label: 'Meh / Okay', value: 'okay', icon: Meh },
+          { label: 'Rough one', value: 'bad', icon: Frown }
         ]
       }
     ];
@@ -181,7 +173,8 @@ export const QuickLogFlow: React.FC<QuickLogFlowProps> = ({
                       : 'hover:bg-white/5'
                   }`}
                 >
-                  <div className="text-center py-3">
+                  <div className="text-center py-3 flex items-center justify-center gap-3">
+                    <option.icon size={20} className={answers[currentQuestion.id] === option.value ? 'text-jarvis-cyan' : 'text-jarvis-gray'} />
                     <p className="text-lg font-medium">{option.label}</p>
                   </div>
                 </Card>

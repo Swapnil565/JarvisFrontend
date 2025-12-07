@@ -6,75 +6,47 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // JARVIS Brand Colors
         jarvis: {
           navy: {
-            DEFAULT: '#0A1929',
-            light: '#0F2942',
-            lighter: '#1a3a5c',
+            DEFAULT: '#09121D', // The deep background
+            light: '#112235',   // Card background
           },
           cyan: {
-            DEFAULT: '#00D9FF',
-            light: '#33E3FF',
-            dark: '#00B8D9',
+            DEFAULT: '#00E0FF', // The glowing text
+            dim: 'rgba(0, 224, 255, 0.1)',
           },
           amber: {
-            DEFAULT: '#FFB020',
-            light: '#FFC859',
-            dark: '#E69900',
+            DEFAULT: '#FFB020', // The progress bar
           },
-          gray: {
-            DEFAULT: '#8B95A5',
-            light: '#A5B1C2',
-            dark: '#6B7789',
+          text: {
+            primary: '#FFFFFF',
+            secondary: '#586A84', // That specific grey for "Alex"
+            tertiary: '#3B4C63',
           },
-          green: {
-            DEFAULT: '#34D399',
-            light: '#6EE7B7',
-            dark: '#10B981',
-          },
+          // Legacy support & additional colors
+          gray: '#586A84',
+          green: '#10B981', // Emerald 500
+          'soft-gray': '#94A3B8', // Slate 400 - softer than the main gray
+          'deep-navy': '#09121D', // Alias for main navy
+          'electric-cyan': '#00E0FF', // Alias for main cyan
+          'warm-amber': '#FFB020', // Alias for main amber
+          'muted-green': '#059669', // Emerald 600
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        // You must import 'Space Grotesk' from Google Fonts in layout.tsx
         display: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
-      spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
-        '128': '32rem',
+      backgroundImage: {
+        // This is the secret sauce: A subtle radial light from the top
+        'jarvis-gradient': 'radial-gradient(circle at 50% 0%, #162a45 0%, #09121D 60%)',
       },
-      backdropBlur: {
-        xs: '2px',
-      },
-      animation: {
-        'scale-in': 'scaleIn 0.2s ease-out',
-        'slide-up': 'slideUp 0.4s ease-out',
-        'fade-in': 'fadeIn 0.3s ease-out',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'glow': 'glow 2s ease-in-out infinite',
-      },
-      keyframes: {
-        scaleIn: {
-          '0%': { transform: 'scale(0.95)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(100%)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        glow: {
-          '0%, 100%': { opacity: '0.5' },
-          '50%': { opacity: '1' },
-        },
+      boxShadow: {
+        'glow-cyan': '0 0 20px rgba(0, 224, 255, 0.5)',
       },
     },
   },

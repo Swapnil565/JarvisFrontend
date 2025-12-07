@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { motionTransition } from '@/lib/motion';
 import { DataPoint, Dimension } from '@/types/progress';
+import { Activity, Brain, Sparkles, TrendingUp, TrendingDown, ArrowRight } from 'lucide-react';
 
 interface TrendChartProps {
   dimension: Dimension;
@@ -12,9 +13,9 @@ interface TrendChartProps {
 }
 
 const dimensionConfig = {
-  physical: { emoji: '💪', color: '#34D399', name: 'Physical' },
-  mental: { emoji: '🧠', color: '#00D9FF', name: 'Mental' },
-  spiritual: { emoji: '✨', color: '#FFB020', name: 'Spiritual' },
+  physical: { icon: Activity, color: '#34D399', name: 'Physical' },
+  mental: { icon: Brain, color: '#00D9FF', name: 'Mental' },
+  spiritual: { icon: Sparkles, color: '#FFB020', name: 'Spiritual' },
 };
 
 export default function TrendChart({ dimension, dataPoints, currentScore, trend }: TrendChartProps) {
@@ -38,7 +39,7 @@ export default function TrendChart({ dimension, dataPoints, currentScore, trend 
   // Create gradient fill area
   const fillPathD = `${pathD} L ${chartWidth} ${chartHeight} L 0 ${chartHeight} Z`;
 
-  const trendEmoji = trend === 'improving' ? '📈' : trend === 'declining' ? '📉' : '➡️';
+  const TrendIcon = trend === 'improving' ? TrendingUp : trend === 'declining' ? TrendingDown : ArrowRight;
   const trendColor = trend === 'improving' ? '#34D399' : trend === 'declining' ? '#FFB020' : '#8B95A5';
 
   return (
@@ -52,7 +53,7 @@ export default function TrendChart({ dimension, dataPoints, currentScore, trend 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <span className="text-3xl">{config.emoji}</span>
+          <config.icon size={32} style={{ color: config.color }} />
           <div>
             <h3 className="text-lg font-semibold text-jarvis-soft-gray">
               {config.name}
@@ -68,7 +69,7 @@ export default function TrendChart({ dimension, dataPoints, currentScore, trend 
         
         {/* Trend indicator */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-jarvis-deep-navy/50">
-          <span className="text-lg">{trendEmoji}</span>
+          <TrendIcon size={20} className="text-[color:var(--trend)]" />
           <span className="text-sm font-medium capitalize text-[color:var(--trend)]">
             {trend}
           </span>

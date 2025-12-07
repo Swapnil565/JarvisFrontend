@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { TrendingUp, Calendar, Search, ArrowLeft, Check } from 'lucide-react';
 import TrendChart from './TrendChart';
 import WeeklySummaryCard from './WeeklySummaryCard';
 import HistoricalPatternsList from './HistoricalPatternsList';
-import { TimeRange, TrendData, WeeklySummary, HistoricalPattern } from '@/types/progress';
+import { Container, PageLayout } from '@/components/ui';
 
 export default function ProgressPage() {
   const [timeRange, setTimeRange] = useState<TimeRange>('month');
@@ -179,28 +180,27 @@ export default function ProgressPage() {
   ];
 
   const tabs = [
-    { value: 'trends' as const, label: 'Trends', emoji: '📈' },
-    { value: 'summaries' as const, label: 'Summaries', emoji: '📅' },
-    { value: 'patterns' as const, label: 'Patterns', emoji: '🔍' },
+    { value: 'trends' as const, label: 'Trends', icon: TrendingUp },
+    { value: 'summaries' as const, label: 'Summaries', icon: Calendar },
+    { value: 'patterns' as const, label: 'Patterns', icon: Search },
   ];
 
   return (
-    <div className="min-h-screen bg-jarvis-deep-navy pb-20">
+    <PageLayout>
+      <Container size="lg" className="pb-20">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-jarvis-deep-navy/80 backdrop-blur-xl border-b border-jarvis-soft-gray/10">
-        <div className="container mx-auto px-6 py-6">
+      <div className="sticky top-0 z-10 bg-jarvis-navy/80 backdrop-blur-xl border-b border-white/5 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+        <div className="py-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <button
                 onClick={() => window.history.back()}
-                className="text-jarvis-soft-gray hover:text-white transition-colors mb-2"
+                className="flex items-center gap-2 text-jarvis-text-secondary hover:text-white transition-colors mb-2"
               >
-                ← Back
+                <ArrowLeft size={16} />
+                <span>Back</span>
               </button>
-              <h1 className="text-3xl font-bold text-white">Your Progress</h1>
-              <p className="text-sm text-jarvis-soft-gray mt-1">
-                Movement over time. No judgment, just awareness.
-              </p>
+              <h1 className="heading-lg text-white">Your Progress</h1>
             </div>
 
             {/* Time range selector */}
@@ -233,7 +233,7 @@ export default function ProgressPage() {
                     : 'text-jarvis-soft-gray hover:text-white hover:bg-jarvis-deep-navy/50'
                 }`}
               >
-                <span>{tab.emoji}</span>
+                <tab.icon size={16} />
                 <span>{tab.label}</span>
               </button>
             ))}
@@ -306,9 +306,10 @@ export default function ProgressPage() {
         {/* Summaries Tab */}
         {activeTab === 'summaries' && (
           <div className="space-y-6">
-            <div className="glass-card p-6 mb-6">
+            <div className="glass-card p-6 mb-6 flex items-start gap-3">
+              <Calendar className="w-5 h-5 text-jarvis-electric-cyan shrink-0 mt-0.5" />
               <p className="text-sm text-jarvis-soft-gray">
-                📅 Weekly snapshots showing your journey. Highlights, lowlights, and movement across all three dimensions.
+                Weekly snapshots showing your journey. Highlights, lowlights, and movement across all three dimensions.
               </p>
             </div>
             {mockWeeklySummaries.map((summary, index) => (
@@ -321,11 +322,17 @@ export default function ProgressPage() {
         {activeTab === 'patterns' && (
           <div>
             <div className="glass-card p-6 mb-6">
-              <p className="text-sm text-jarvis-soft-gray mb-4">
-                🔍 Patterns we have discovered together. Tap to see full details and evidence.
-              </p>
+              <div className="flex items-start gap-3 mb-4">
+                <Search className="w-5 h-5 text-jarvis-electric-cyan shrink-0 mt-0.5" />
+                <p className="text-sm text-jarvis-soft-gray">
+                  Patterns we have discovered together. Tap to see full details and evidence.
+                </p>
+              </div>
               <div className="flex items-center gap-2 text-xs text-jarvis-soft-gray">
-                <span className="px-2 py-1 rounded bg-jarvis-muted-green/20 text-jarvis-muted-green">✓ Acted on</span>
+                <span className="px-2 py-1 rounded bg-jarvis-muted-green/20 text-jarvis-muted-green flex items-center gap-1">
+                  <Check size={12} />
+                  Acted on
+                </span>
                 <span>= You tried the suggestion</span>
               </div>
             </div>
@@ -333,6 +340,7 @@ export default function ProgressPage() {
           </div>
         )}
       </div>
-    </div>
+      </Container>
+    </PageLayout>
   );
 }

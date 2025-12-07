@@ -11,7 +11,7 @@ interface DimensionCardProps {
   status: 'great' | 'good' | 'warning' | 'alert';
   score?: number;
   insight?: string;
-  emoji: string;
+  icon?: React.ElementType;
 }
 
 export const DimensionCard: React.FC<DimensionCardProps> = ({
@@ -19,7 +19,7 @@ export const DimensionCard: React.FC<DimensionCardProps> = ({
   status,
   score,
   insight,
-  emoji
+  icon: Icon
 }) => {
   const router = useRouter();
   const dimensionConfig = {
@@ -55,12 +55,16 @@ export const DimensionCard: React.FC<DimensionCardProps> = ({
       whileHover={{ scale: 1.04 }}
       transition={{ ...hoverSpring, stiffness: 320 }}
     >
-  <Card className="cursor-pointer" onClick={() => router.push(`/insights?dimension=${dimension}`)}>
-        <div className="space-y-4">
+  <Card className="cursor-pointer p-6" onClick={() => router.push(`/insights?dimension=${dimension}`)}>
+        <div className="flex flex-col gap-5">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="text-3xl">{emoji}</span>
+            <div className="flex items-center gap-4">
+              {Icon && (
+                <div className={`p-2 rounded-lg bg-white/5 ${config.color}`}>
+                  <Icon size={24} strokeWidth={1.5} />
+                </div>
+              )}
               <div>
                 <h3 className={`heading-sm ${config.color}`}>{config.title}</h3>
                 <span className={`text-xs ${statusInfo.color}`}>{statusInfo.label}</span>

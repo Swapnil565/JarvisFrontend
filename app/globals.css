@@ -9,14 +9,7 @@
   :root {
     --font-inter: 'Inter', system-ui, sans-serif;
     --font-space-grotesk: 'Space Grotesk', system-ui, sans-serif;
-    /* 8px spacing system */
-    --space-unit: 8px;
-    --space-1: calc(var(--space-unit) * 1);
-    --space-2: calc(var(--space-unit) * 2);
-    --space-3: calc(var(--space-unit) * 3);
-    --space-4: calc(var(--space-unit) * 4);
-    --space-6: calc(var(--space-unit) * 6);
-
+    
     /* Type scale */
     --type-hero: 40px;
     --type-xl: 32px;
@@ -26,12 +19,11 @@
     --type-sm: 14px;
   }
 
-  * {
-    @apply border-jarvis-gray/20;
-  }
-
   body {
-    @apply bg-jarvis-navy text-white font-sans antialiased;
+    /* The Deep Background */
+    @apply bg-jarvis-navy text-jarvis-text-primary min-h-screen font-sans antialiased;
+    background-image: radial-gradient(circle at 50% -20%, #1a3554 0%, #09121D 50%);
+    background-attachment: fixed; /* Keeps gradient in place when scrolling */
   }
 
   /* Dark mode is default */
@@ -41,10 +33,36 @@
 }
 
 @layer components {
-  /* Glass Morphism Card */
+  /* The Glass Card Style */
   .glass-card {
-    @apply bg-jarvis-navy-light/60 backdrop-blur-xl border border-jarvis-cyan/10 rounded-2xl;
-    @apply shadow-[0_8px_32px_rgba(0,0,0,0.3)];
+    /* Very subtle transparency + blur */
+    background: rgba(17, 34, 53, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    border-radius: 1rem; /* rounded-2xl */
+  }
+
+  /* Active state for interactive cards */
+  .glass-card-interactive {
+    @apply glass-card transition-all duration-300 ease-out;
+  }
+  .glass-card-interactive:active {
+    @apply scale-[0.98] bg-jarvis-navy-light/80 border-jarvis-cyan/30;
+  }
+
+  /* Typography Hierarchy */
+  .heading-hero {
+    @apply font-display font-bold text-4xl tracking-tight text-jarvis-text-primary;
+  }
+  
+  .heading-section {
+    @apply font-display font-semibold text-xl tracking-tight text-jarvis-text-primary;
+  }
+
+  .text-label {
+    @apply font-sans text-xs font-medium text-jarvis-text-tertiary uppercase tracking-wider;
   }
 
   /* Glass Morphism with Glow */
@@ -52,7 +70,7 @@
     @apply glass-card;
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.3),
-      0 0 0 1px rgba(0, 217, 255, 0.1),
+      0 0 0 1px rgba(0, 224, 255, 0.1),
       inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   }
 
@@ -65,8 +83,8 @@
   /* Primary Button (Cyan) */
   .btn-primary {
     @apply btn bg-jarvis-cyan text-jarvis-navy;
-    @apply hover:bg-jarvis-cyan-light;
-    @apply shadow-[0_4px_16px_rgba(0,217,255,0.3)];
+    @apply hover:bg-jarvis-cyan/90;
+    @apply shadow-[0_4px_16px_rgba(0,224,255,0.3)];
   }
 
   /* Secondary Button (Transparent with border) */
@@ -77,8 +95,8 @@
 
   /* Ghost Button */
   .btn-ghost {
-    @apply btn bg-transparent text-jarvis-gray;
-    @apply hover:bg-white/5 hover:text-white;
+    @apply btn bg-transparent text-jarvis-text-secondary;
+    @apply hover:bg-white/5 hover:text-jarvis-text-primary;
   }
 
   /* Input Base */
@@ -86,7 +104,7 @@
     @apply w-full px-4 py-3 rounded-xl;
     @apply bg-jarvis-navy-light/60 backdrop-blur-xl;
     @apply border border-jarvis-cyan/20;
-    @apply text-white placeholder:text-jarvis-gray;
+    @apply text-jarvis-text-primary placeholder:text-jarvis-text-secondary;
     @apply focus:outline-none focus:border-jarvis-cyan focus:ring-2 focus:ring-jarvis-cyan/20;
     @apply transition-all duration-200;
   }
@@ -116,12 +134,12 @@
 
   /* Body Text */
   .text-body {
-    @apply text-jarvis-gray leading-relaxed;
+    @apply text-jarvis-text-secondary leading-relaxed;
     font-size: var(--type-base);
   }
 
   .text-body-lg {
-    @apply text-lg md:text-xl text-jarvis-gray leading-relaxed;
+    @apply text-lg md:text-xl text-jarvis-text-secondary leading-relaxed;
   }
 
   /* Breathing Room - JARVIS principle */
@@ -135,11 +153,11 @@
   }
 
   .status-complete {
-    @apply status-badge bg-jarvis-green/10 text-jarvis-green border border-jarvis-green/20;
+    @apply status-badge bg-jarvis-cyan/10 text-jarvis-cyan border border-jarvis-cyan/20;
   }
 
   .status-incomplete {
-    @apply status-badge bg-jarvis-gray/10 text-jarvis-gray border border-jarvis-gray/20;
+    @apply status-badge bg-jarvis-text-tertiary/10 text-jarvis-text-tertiary border border-jarvis-text-tertiary/20;
   }
 
   /* Streak Counter */
@@ -165,8 +183,8 @@
   /* Cyan Glow Effect */
   .glow-cyan {
     box-shadow: 
-      0 0 20px rgba(0, 217, 255, 0.3),
-      0 0 40px rgba(0, 217, 255, 0.1);
+      0 0 20px rgba(0, 224, 255, 0.3),
+      0 0 40px rgba(0, 224, 255, 0.1);
   }
 
   /* Amber Glow Effect */
@@ -178,11 +196,11 @@
 
   /* Text Gradient */
   .text-gradient-cyan {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-jarvis-cyan to-jarvis-cyan-light;
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-jarvis-cyan to-jarvis-cyan/70;
   }
 
   .text-gradient-amber {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-jarvis-amber to-jarvis-amber-light;
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-jarvis-amber to-jarvis-amber/70;
   }
 
   /* Hide scrollbar */

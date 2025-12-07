@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Flame } from 'lucide-react';
 import { motionTransition } from '../../lib/motion';
 
 interface StreakCounterProps {
@@ -21,7 +22,7 @@ export const StreakCounter: React.FC<StreakCounterProps> = ({
       className="text-center py-6"
     >
       <div className="flex items-center justify-center gap-2 mb-2">
-        <motion.span
+        <motion.div
           animate={{ 
             scale: [1, 1.2, 1],
             rotate: [0, 5, -5, 0]
@@ -31,10 +32,9 @@ export const StreakCounter: React.FC<StreakCounterProps> = ({
             repeat: Infinity,
             repeatDelay: 3
           }}
-          className="text-5xl"
         >
-          🔥
-        </motion.span>
+          <Flame size={48} className="text-orange-500" />
+        </motion.div>
         <span className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-jarvis-amber to-jarvis-cyan">
           {currentStreak}
         </span>

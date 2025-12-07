@@ -10,6 +10,14 @@ import { NarrativeCard, NarrativeInsight } from '@/components/insights/Narrative
 import { NarrativeDetailOverlay } from '@/components/insights/NarrativeDetailOverlay';
 import { PatternDetailOverlay } from '@/components/insights/PatternDetailOverlay';
 import { Pattern, PatternFilters } from '@/types/pattern';
+import { 
+  Brain, 
+  Activity, 
+  Sparkles, 
+  TrendingDown, 
+  TrendingUp, 
+  ArrowRight 
+} from 'lucide-react';
 
 // Mock data - will be replaced with API data in Phase 9
 const mockPatterns: Pattern[] = [
@@ -131,33 +139,33 @@ export const InsightsPage: React.FC = () => {
   const narrativeInsights: NarrativeInsight[] = [
     {
       id: 'n1',
-      emoji: '🧠',
+      icon: Brain,
       title: 'Focus slump follows meeting marathons',
       daySpan: 'Days 30–36',
       summary: 'Across the last 7 days, every afternoon with 3+ stacked meetings led to a 25–40% drop in reported focus and mental clarity.',
       highlight: 'Protect one deep-work block before noon.',
       trendLabel: 'Focus declining',
-      trendEmoji: '📉'
+      trendIcon: TrendingDown
     },
     {
       id: 'n2',
-      emoji: '💪',
+      icon: Activity,
       title: 'Stable energy on training mornings',
       daySpan: 'Days 22–28',
       summary: 'Morning resistance training correlates with smoother mood regulation the rest of the day—even on higher stress inputs.',
       highlight: 'Training acts as a nervous system stabilizer.',
       trendLabel: 'Energy improving',
-      trendEmoji: '📈'
+      trendIcon: TrendingUp
     },
     {
       id: 'n3',
-      emoji: '✨',
+      icon: Sparkles,
       title: 'Evening decompression reduces sleep volatility',
       daySpan: 'Days 18–24',
       summary: 'On nights where a 10–15 min wind-down was logged, sleep duration variance narrowed and subjective recovery scored higher next morning.',
       highlight: 'Micro wind-down protects sleep quality.',
       trendLabel: 'Sleep stabilizing',
-      trendEmoji: '➡️'
+      trendIcon: ArrowRight
     }
   ];
 
@@ -171,7 +179,10 @@ export const InsightsPage: React.FC = () => {
           animate="visible"
           className="mb-12"
         >
-          <h1 className="heading-xl mb-3">{copy.insights.patternsHeadline}</h1>
+          <div className="flex items-center gap-3 mb-3">
+            <Sparkles className="text-jarvis-cyan" size={32} />
+            <h1 className="heading-xl">{copy.insights.patternsHeadline}</h1>
+          </div>
           <p className="text-body-lg">{copy.insights.patternsSub}</p>
         </motion.div>
 
@@ -179,7 +190,7 @@ export const InsightsPage: React.FC = () => {
         <motion.div
           variants={staggerChildren(0.08)}
           initial="hidden"
-          animate="animate"
+          animate="visible"
           className="mb-12 space-y-6"
         >
           <h2 className="heading-md mb-2">{copy.insights.snapshotsHeadline}</h2>
@@ -242,7 +253,7 @@ export const InsightsPage: React.FC = () => {
         <motion.div
           variants={staggerChildren(0.05)}
           initial="hidden"
-          animate="animate"
+          animate="visible"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {filteredPatterns.map((pattern, index) => (

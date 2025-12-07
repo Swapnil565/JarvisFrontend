@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { Users, ArrowLeft } from 'lucide-react';
 import { Container, PageLayout } from '@/components/ui';
 import { InterventionFeed } from '@/components/interventions/InterventionFeed';
 import { Intervention } from '@/types/intervention';
@@ -90,12 +91,15 @@ export const InterventionsPage: React.FC = () => {
           className="mb-8"
         >
           <div className="flex items-center justify-between mb-2">
-            <h1 className="heading-xl">Interventions 🤝</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="heading-xl">Interventions</h1>
+              <Users className="text-jarvis-cyan" size={32} />
+            </div>
             <button
               onClick={() => router.push('/dashboard')}
-              className="text-jarvis-gray hover:text-jarvis-cyan transition-colors text-sm"
+              className="text-jarvis-gray hover:text-jarvis-cyan transition-colors text-sm flex items-center gap-1"
             >
-              ← Back to dashboard
+              <ArrowLeft size={16} /> Back to dashboard
             </button>
           </div>
           <p className="text-jarvis-gray text-lg">

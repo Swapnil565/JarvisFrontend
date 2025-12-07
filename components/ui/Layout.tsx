@@ -38,7 +38,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
   className = ''
 }) => {
   return (
-    <div className={`min-h-screen bg-jarvis-navy ${className}`}>
+    <div className={`min-h-screen ${className}`}>
       {children}
     </div>
   );

@@ -3,28 +3,33 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button, Card } from '@/components/ui';
+import { Target, MessageCircle, Sunrise, Sun, Smile, Meh, Frown, CloudRain, LucideIcon, Moon } from 'lucide-react';
 
 interface ReflectionQuestion {
   id: string;
   question: string;
   placeholder: string;
+  icon: LucideIcon;
 }
 
 const reflectionQuestions: ReflectionQuestion[] = [
   {
     id: 'wins',
-    question: '🎯 What went well today?',
-    placeholder: 'Even small wins count...'
+    question: 'What went well today?',
+    placeholder: 'Even small wins count...',
+    icon: Target
   },
   {
     id: 'challenges',
-    question: '💭 What was challenging?',
-    placeholder: 'What drained your energy?'
+    question: 'What was challenging?',
+    placeholder: 'What drained your energy?',
+    icon: MessageCircle
   },
   {
     id: 'tomorrow',
-    question: '🌅 What would make tomorrow better?',
-    placeholder: 'One thing you could adjust...'
+    question: 'What would make tomorrow better?',
+    placeholder: 'One thing you could adjust...',
+    icon: Sunrise
   }
 ];
 
@@ -40,12 +45,12 @@ export const EndOfDayFlow: React.FC<EndOfDayFlowProps> = ({
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [overallMood, setOverallMood] = useState<number | null>(null);
 
-  const moods = [
-    { emoji: '😊', label: 'Great day', value: 5 },
-    { emoji: '🙂', label: 'Good day', value: 4 },
-    { emoji: '😐', label: 'Okay day', value: 3 },
-    { emoji: '😕', label: 'Tough day', value: 2 },
-    { emoji: '😢', label: 'Hard day', value: 1 }
+  const moods: { icon: LucideIcon; label: string; value: number; color: string }[] = [
+    { icon: Sun, label: 'Great day', value: 5, color: 'text-jarvis-cyan' },
+    { icon: Smile, label: 'Good day', value: 4, color: 'text-jarvis-green' },
+    { icon: Meh, label: 'Okay day', value: 3, color: 'text-jarvis-amber' },
+    { icon: Frown, label: 'Tough day', value: 2, color: 'text-orange-400' },
+    { icon: CloudRain, label: 'Hard day', value: 1, color: 'text-red-400' }
   ];
 
   const handleAnswerChange = (id: string, value: string) => {
@@ -72,7 +77,10 @@ export const EndOfDayFlow: React.FC<EndOfDayFlowProps> = ({
       >
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="heading-xl mb-3">End of day reflection 🌙</h1>
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <Moon size={32} className="text-jarvis-cyan" />
+            <h1 className="heading-xl">End of day reflection</h1>
+          </div>
           <p className="text-jarvis-gray text-lg">
             Take a moment to check in. All fields are optional.
           </p>
@@ -97,7 +105,7 @@ export const EndOfDayFlow: React.FC<EndOfDayFlowProps> = ({
                     : 'bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60'
                 }`}
               >
-                <span className="text-3xl">{mood.emoji}</span>
+                <mood.icon size={32} className={mood.color} />
                 <span className="text-xs text-center">{mood.label}</span>
               </motion.button>
             ))}
@@ -114,7 +122,10 @@ export const EndOfDayFlow: React.FC<EndOfDayFlowProps> = ({
               transition={{ delay: 0.3 + index * 0.1 }}
             >
               <Card>
-                <h3 className="heading-sm mb-3">{q.question}</h3>
+                <h3 className="heading-sm mb-3 flex items-center gap-2">
+                  <q.icon size={18} className="text-jarvis-cyan" />
+                  {q.question}
+                </h3>
                 <textarea
                   value={answers[q.id] || ''}
                   onChange={(e) => handleAnswerChange(q.id, e.target.value)}
@@ -143,7 +154,7 @@ export const EndOfDayFlow: React.FC<EndOfDayFlowProps> = ({
             className="flex-1"
             disabled={!isValid}
           >
-            {hasAnyReflection ? "Save reflection 🌙" : "Just save mood"}
+            {hasAnyReflection ? "Save reflection" : "Just save mood"}
           </Button>
         </motion.div>
 

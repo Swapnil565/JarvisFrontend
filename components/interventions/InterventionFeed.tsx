@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 import { InterventionCard } from './InterventionCard';
 import { Intervention } from '@/types/intervention';
 
@@ -40,9 +41,11 @@ export const InterventionFeed: React.FC<InterventionFeedProps> = ({
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="text-center py-12"
+        className="text-center py-12 flex flex-col items-center"
       >
-        <div className="text-5xl mb-4">✨</div>
+        <div className="mb-4 text-jarvis-cyan">
+          <Sparkles size={48} strokeWidth={1.5} />
+        </div>
         <h3 className="heading-md mb-2">You're all caught up</h3>
         <p className="text-jarvis-gray">No interventions right now. Keep doing what you're doing!</p>
       </motion.div>

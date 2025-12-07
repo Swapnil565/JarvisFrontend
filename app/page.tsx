@@ -21,10 +21,10 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-jarvis-navy flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <h1 className="heading-xl text-jarvis-cyan mb-4">Loading JARVIS...</h1>
-        <p className="text-jarvis-gray">Getting things ready for you</p>
+        <p className="text-jarvis-text-secondary">Getting things ready for you</p>
       </div>
     </div>
   );

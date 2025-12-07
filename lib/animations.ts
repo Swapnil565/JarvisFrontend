@@ -43,7 +43,7 @@ export const recordButtonVariants = {
 
 // Stagger helper
 export const staggerChildren = (stagger: number = 0.06) => ({
-	animate: { transition: { staggerChildren: stagger } }
+	visible: { transition: { staggerChildren: stagger } }
 });
 
 // Child fade for stagger contexts

@@ -5,6 +5,18 @@ import { motion, PanInfo, useAnimation } from 'framer-motion';
 import { motionTransition, hoverSpring } from '@/lib/motion';
 import { Card } from '@/components/ui';
 import { Intervention } from '@/types/intervention';
+import { 
+  Moon, 
+  Activity, 
+  MessageCircle, 
+  Briefcase, 
+  Lightbulb, 
+  X, 
+  Clock, 
+  Check, 
+  ChevronDown, 
+  ChevronRight 
+} from 'lucide-react';
 
 interface InterventionCardProps {
   intervention: Intervention;
@@ -24,11 +36,11 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
   const controls = useAnimation();
 
   const categoryConfig = {
-    rest: { emoji: '😴', color: 'text-jarvis-cyan', label: 'Rest' },
-    movement: { emoji: '🏃', color: 'text-jarvis-green', label: 'Movement' },
-    social: { emoji: '💬', color: 'text-jarvis-amber', label: 'Social' },
-    work: { emoji: '💼', color: 'text-jarvis-amber', label: 'Work' },
-    general: { emoji: '💡', color: 'text-jarvis-cyan', label: 'General' }
+    rest: { icon: Moon, color: 'text-jarvis-cyan', label: 'Rest' },
+    movement: { icon: Activity, color: 'text-jarvis-green', label: 'Movement' },
+    social: { icon: MessageCircle, color: 'text-jarvis-amber', label: 'Social' },
+    work: { icon: Briefcase, color: 'text-jarvis-amber', label: 'Work' },
+    general: { icon: Lightbulb, color: 'text-jarvis-cyan', label: 'General' }
   };
 
   const priorityConfig = {
@@ -72,14 +84,14 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
       animate={controls}
       className="relative"
     >
-      <Card className="overflow-hidden">
-        <div className="space-y-4">
+      <Card className="overflow-hidden p-4">
+        <div className="space-y-3">
           {/* Header */}
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">{config.emoji}</span>
+              <config.icon size={20} className={config.color} />
               <div>
-                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${priorityInfo.bg} ${priorityInfo.color}`}>
+                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${priorityInfo.bg} ${priorityInfo.color}`}>
                   {priorityInfo.label}
                 </span>
               </div>
@@ -89,22 +101,22 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
               className="text-jarvis-gray hover:text-white transition-colors p-1 focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1 rounded-md"
               aria-label="Dismiss"
             >
-              <span aria-hidden className="text-lg">✖️</span>
+              <X size={16} />
             </button>
           </div>
 
           {/* Title & Message */}
           <div>
-            <h3 className={`heading-sm ${config.color} mb-2`}>{intervention.title}</h3>
-            <p className="text-jarvis-gray leading-relaxed">{intervention.message}</p>
+            <h3 className={`text-base font-display font-semibold ${config.color} mb-1.5`}>{intervention.title}</h3>
+            <p className="text-sm text-jarvis-gray leading-relaxed">{intervention.message}</p>
           </div>
 
           {/* Reasoning toggle */}
           <button
             onClick={() => setShowReasoning(!showReasoning)}
-            className="text-sm text-jarvis-cyan hover:underline flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1 rounded-md"
+            className="text-xs text-jarvis-cyan hover:underline flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1 rounded-md"
           >
-            {showReasoning ? '▼' : '▶'} Why am I seeing this?
+            {showReasoning ? <ChevronDown size={14} /> : <ChevronRight size={14} />} Why am I seeing this?
           </button>
 
           {/* Reasoning expansion */}
@@ -114,19 +126,19 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={motionTransition}
-                    className="p-4 bg-jarvis-navy-light/40 rounded-xl border border-jarvis-cyan/20"
+                    className="p-3 bg-jarvis-navy-light/40 rounded-xl border border-jarvis-cyan/20"
                   >
-              <p className="text-sm text-jarvis-gray leading-relaxed">{intervention.reasoning}</p>
+              <p className="text-xs text-jarvis-gray leading-relaxed">{intervention.reasoning}</p>
             </motion.div>
           )}
 
           {/* Actions */}
-          <div className="flex items-center gap-3 pt-2">
+          <div className="flex items-center gap-2 pt-1">
             <button
               onClick={() => setShowSnoozeOptions(!showSnoozeOptions)}
-              className="px-4 py-2 rounded-xl bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60 text-jarvis-gray hover:text-white transition-all text-sm focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
+              className="px-3 py-1.5 rounded-lg bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60 text-jarvis-gray hover:text-white transition-all text-xs flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
             >
-              ⏰ Snooze
+              <Clock size={14} /> Snooze
             </button>
             
             {onAction && (
@@ -135,13 +147,13 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
                   onAction(intervention.id, 'acknowledged');
                   onDismiss(intervention.id);
                 }}
-                className="px-4 py-2 rounded-xl bg-jarvis-cyan/10 hover:bg-jarvis-cyan/20 text-jarvis-cyan transition-all text-sm font-medium focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
+                className="px-3 py-1.5 rounded-lg bg-jarvis-cyan/10 hover:bg-jarvis-cyan/20 text-jarvis-cyan transition-all text-xs font-medium flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
               >
-                Got it 👍
+                Got it <Check size={14} />
               </button>
             )}
 
-            <div className="ml-auto text-xs text-jarvis-gray">
+            <div className="ml-auto text-[10px] text-jarvis-gray">
               Swipe to dismiss →
             </div>
           </div>
@@ -161,7 +173,7 @@ export const InterventionCard: React.FC<InterventionCardProps> = ({
                     onSnooze(intervention.id, option.hours);
                     setShowSnoozeOptions(false);
                   }}
-                  className="px-3 py-2 rounded-lg bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60 text-jarvis-gray hover:text-white transition-all text-sm focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
+                  className="px-2 py-1.5 rounded-md bg-jarvis-navy-light/40 hover:bg-jarvis-navy-light/60 text-jarvis-gray hover:text-white transition-all text-xs focus:outline-none focus:ring-2 focus:ring-jarvis-cyan/60 focus:ring-offset-1"
                 >
                   {option.label}
                 </button>

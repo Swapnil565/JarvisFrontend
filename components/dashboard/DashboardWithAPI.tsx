@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { TrendingUp, BarChart2, Bell, Settings, Activity, Cpu, Sparkles } from 'lucide-react';
 import { Container, PageLayout, Button } from '@/components/ui';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ErrorMessage from '@/components/ui/ErrorMessage';
@@ -105,7 +106,7 @@ export const Dashboard: React.FC = () => {
                 className="text-jarvis-gray hover:text-jarvis-cyan transition-colors relative"
                 title="View Progress"
               >
-                <span className="text-2xl">📈</span>
+                <TrendingUp size={24} />
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -114,7 +115,7 @@ export const Dashboard: React.FC = () => {
                 className="text-jarvis-gray hover:text-jarvis-cyan transition-colors relative"
                 title="View Insights"
               >
-                <span className="text-2xl">📊</span>
+                <BarChart2 size={24} />
                 {dashboardData.hasNewInsights && (
                   <span className="absolute -top-1 -right-1 w-2 h-2 bg-jarvis-electric-cyan rounded-full" />
                 )}
@@ -126,7 +127,7 @@ export const Dashboard: React.FC = () => {
                 className="text-jarvis-gray hover:text-jarvis-cyan transition-colors relative"
                 title="Interventions"
               >
-                <span className="text-2xl">🔔</span>
+                <Bell size={24} />
                 {dashboardData.hasActiveInterventions && (
                   <span className="absolute -top-1 -right-1 w-3 h-3 bg-jarvis-amber rounded-full border-2 border-jarvis-navy" />
                 )}
@@ -138,7 +139,7 @@ export const Dashboard: React.FC = () => {
                 className="text-jarvis-gray hover:text-jarvis-cyan transition-colors"
                 title="Settings"
               >
-                <span className="text-2xl">⚙️</span>
+                <Settings size={24} />
               </motion.button>
             </div>
           </div>
@@ -183,7 +184,7 @@ export const Dashboard: React.FC = () => {
               status={dim.status}
               score={dim.score}
               insight={dim.insight}
-              emoji={dim.dimension === 'physical' ? '💪' : dim.dimension === 'mental' ? '🧠' : '✨'}
+              icon={dim.dimension === 'physical' ? Activity : dim.dimension === 'mental' ? Cpu : Sparkles}
             />
           ))}
         </motion.div>

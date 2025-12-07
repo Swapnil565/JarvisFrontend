@@ -2,15 +2,16 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Laugh, Smile, Meh, Frown, CloudRain, Sparkles } from 'lucide-react';
 import { motionTransition, hoverSpring, tapSpring } from '../../lib/motion';
 import { Card } from '@/components/ui';
 
 const moods = [
-  { emoji: '😊', label: 'Great', value: 5 },
-  { emoji: '🙂', label: 'Good', value: 4 },
-  { emoji: '😐', label: 'Okay', value: 3 },
-  { emoji: '😕', label: 'Meh', value: 2 },
-  { emoji: '😢', label: 'Rough', value: 1 }
+  { icon: Laugh, label: 'Great', value: 5, color: 'text-green-400' },
+  { icon: Smile, label: 'Good', value: 4, color: 'text-jarvis-cyan' },
+  { icon: Meh, label: 'Okay', value: 3, color: 'text-jarvis-amber' },
+  { icon: Frown, label: 'Meh', value: 2, color: 'text-orange-400' },
+  { icon: CloudRain, label: 'Rough', value: 1, color: 'text-red-400' }
 ];
 
 interface QuickMoodCheckProps {
@@ -61,7 +62,7 @@ export const QuickMoodCheck: React.FC<QuickMoodCheckProps> = ({ onMoodSelect }) 
                       : 'hover:bg-white/5'
                   }`}
                 >
-                  <span className="text-3xl">{mood.emoji}</span>
+                  <mood.icon size={32} className={mood.color} strokeWidth={1.5} />
                   <span className="text-xs text-jarvis-gray">{mood.label}</span>
                 </motion.button>
               ))}
@@ -78,9 +79,9 @@ export const QuickMoodCheck: React.FC<QuickMoodCheckProps> = ({ onMoodSelect }) 
             <motion.div
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 0.5 }}
-              className="text-5xl mb-3"
+              className="flex justify-center mb-3"
             >
-              ✨
+              <Sparkles size={48} className="text-jarvis-cyan" />
             </motion.div>
             <p className="text-jarvis-cyan font-medium">Got it, thanks!</p>
           </motion.div>
