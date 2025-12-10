@@ -9,7 +9,7 @@
     "lint": "next lint",
     "smoke-check": "node ./scripts/smoke-check.js",
     "a11y-check": "node ./scripts/a11y-check.js",
-    "snapshot": "git tag -a v0.1.0-alpha -m 'Frontend polish complete: UI consistency, a11y, voice logging, mobile testing ready' && git push origin v0.1.0-alpha",
+    "snapshot": "git tag -a v0.1.0-alpha -m \"Frontend polish complete\" && git push origin v0.1.0-alpha",
     "test": "vitest"
   },
   "dependencies": {
@@ -22,6 +22,7 @@
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.291.0",
     "next": "^14.2.32",
+    "qrcode": "^1.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.5.3",
@@ -36,6 +37,7 @@
     "@testing-library/react": "^14.3.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20.9.0",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "autoprefixer": "^10.4.16",
