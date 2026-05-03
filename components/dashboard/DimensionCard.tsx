@@ -12,6 +12,7 @@ interface DimensionCardProps {
   score?: number;
   insight?: string;
   icon?: React.ElementType;
+  emoji?: string;
 }
 
 export const DimensionCard: React.FC<DimensionCardProps> = ({

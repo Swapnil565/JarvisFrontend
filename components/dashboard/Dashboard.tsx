@@ -40,19 +40,22 @@ export const Dashboard: React.FC = () => {
       status: 'good' as const,
       score: 7.5,
       insight: 'Workouts consistent. Recovery could be better.',
-      icon: Activity
+      icon: Activity,
+      emoji: '💪'
     },
     mental: {
       status: 'warning' as const,
       score: 6.0,
       insight: 'Focus is slipping. Consider reducing context switching.',
-      icon: Cpu
+      icon: Cpu,
+      emoji: '🧠'
     },
     spiritual: {
       status: 'great' as const,
       score: 8.5,
       insight: 'Great balance. Keep prioritizing what matters.',
-      icon: Sparkles
+      icon: Sparkles,
+      emoji: '✨'
     }
   };
 

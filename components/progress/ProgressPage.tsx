@@ -7,6 +7,7 @@ import TrendChart from './TrendChart';
 import WeeklySummaryCard from './WeeklySummaryCard';
 import HistoricalPatternsList from './HistoricalPatternsList';
 import { Container, PageLayout } from '@/components/ui';
+import type { TimeRange, TrendData, WeeklySummary, HistoricalPattern } from '@/types/progress';
 
 export default function ProgressPage() {
   const [timeRange, setTimeRange] = useState<TimeRange>('month');

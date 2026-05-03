@@ -9,11 +9,13 @@ export interface NarrativeInsight {
   id: string;
   title: string;
   icon: LucideIcon;
-  daySpan: string; // e.g. "Days 12–18"
-  summary: string; // short narrative summary
-  highlight?: string; // optional key highlight sentence
-  trendLabel?: string; // e.g. "Energy improving" / "Focus declining"
-  trendIcon?: LucideIcon; // 📈 / 📉 / ➡️
+  daySpan: string;
+  summary: string;
+  highlight?: string;
+  trendLabel?: string;
+  trendIcon?: LucideIcon;
+  emoji?: string;
+  trendEmoji?: string;
 }
 
 interface NarrativeCardProps {
