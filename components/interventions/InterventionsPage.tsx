@@ -1,84 +1,57 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Users, ArrowLeft } from 'lucide-react';
 import { Container, PageLayout } from '@/components/ui';
 import { InterventionFeed } from '@/components/interventions/InterventionFeed';
 import { Intervention } from '@/types/intervention';
+import { interventionsAPI } from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
 
-// Mock data - will be replaced with API polling in Phase 9
-const mockInterventions: Intervention[] = [
-  {
-    id: '1',
-    title: 'You might want to take it easier today',
-    message: "You've logged high stress 3 days in a row, and your last 2 workouts were marked as 'struggled'. Your body might need a lighter session or rest day.",
-    reasoning: "Based on your pattern: high stress + poor workout performance usually means your recovery is suffering. I've seen this lead to injury or burnout in the past 2 weeks when you pushed through it.",
-    priority: 'high',
-    category: 'rest',
-    timestamp: new Date().toISOString()
-  },
-  {
-    id: '2',
-    title: 'Block some no-meeting time this afternoon',
-    message: 'You have 4 meetings back-to-back today. Based on your patterns, this usually leaves you drained and unable to focus on deep work.',
-    reasoning: "Every time you've had 3+ consecutive meetings in the past 2 weeks, you reported feeling 'exhausted' or 'scattered' afterward. Protecting even 30 minutes between meetings helps you stay sharp.",
-    priority: 'medium',
-    category: 'work',
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: '3',
-    title: 'Consider an earlier bedtime tonight',
-    message: "You're averaging 6.2 hours of sleep this week (down from your usual 7+). Tomorrow is a training day, and you perform 40% better on 7+ hours.",
-    reasoning: "Your workout performance is directly tied to sleep. Last time you trained on <6 hours of sleep, you cut the session short and reported low motivation for 2 days after.",
-    priority: 'medium',
-    category: 'rest',
-    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: '4',
-    title: 'Take a walk before your 2 PM meeting',
-    message: "It's 1:45 PM and you're about to hit your usual afternoon focus dip. A 10-minute walk has helped you stay sharp in similar situations.",
-    reasoning: "You've logged the '2-3 PM crash' 8 times in the past 2 weeks. On days when you took a short walk around 2 PM, you reported better energy and focus for the rest of the afternoon.",
-    priority: 'low',
-    category: 'movement',
-    timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: '5',
-    title: 'Your streak is at risk',
-    message: "You haven't logged anything today. Quick check-in? Even 30 seconds helps me spot patterns and keep your 12-day streak alive 🔥",
-    reasoning: "Consistency is what makes the insights valuable. The more data points I have, the better I can help you spot patterns before they become problems.",
-    priority: 'low',
-    category: 'general',
-    timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString()
-  }
-];
+function mapApiIntervention(raw: any): Intervention {
+  const data = raw.data || {};
+  return {
+    id: String(raw.id),
+    title: raw.title || '',
+    message: raw.message || '',
+    reasoning: data.reasoning || '',
+    priority: (data.priority || raw.urgency || 'low') as Intervention['priority'],
+    category: (data.category || 'general') as Intervention['category'],
+    timestamp: raw.created_at || new Date().toISOString(),
+    dismissed: !!raw.acknowledged_at,
+    snoozedUntil: data.snoozedUntil,
+  };
+}
 
 export const InterventionsPage: React.FC = () => {
-  const [interventions, setInterventions] = useState<Intervention[]>(mockInterventions);
+  const { isReady } = useAuth();
+  const [interventions, setInterventions] = useState<Intervention[]>([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  useEffect(() => {
+    if (!isReady) return;
+    interventionsAPI.getActiveInterventions()
+      .then(raw => setInterventions((raw as any[]).map(mapApiIntervention)))
+      .catch(() => setInterventions([]))
+      .finally(() => setLoading(false));
+  }, [isReady]);
+
   const handleDismiss = (id: string) => {
-    console.log('Dismissed intervention:', id);
     setInterventions(prev => prev.filter(i => i.id !== id));
-    // TODO: Send to API in Phase 9
+    interventionsAPI.dismissIntervention(id).catch(() => {});
   };
 
   const handleSnooze = (id: string, hours: number) => {
-    console.log(`Snoozed intervention ${id} for ${hours} hours`);
     const snoozeUntil = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
-    setInterventions(prev =>
-      prev.map(i => (i.id === id ? { ...i, snoozedUntil: snoozeUntil } : i))
-    );
-    // TODO: Send to API in Phase 9
+    setInterventions(prev => prev.map(i => (i.id === id ? { ...i, snoozedUntil: snoozeUntil } : i)));
+    interventionsAPI.snoozeIntervention(id, snoozeUntil).catch(() => {});
   };
 
   const handleAction = (id: string, action: string) => {
-    console.log('Action taken:', id, action);
-    // TODO: Send to API in Phase 9
+    interventionsAPI.dismissIntervention(id, action).catch(() => {});
   };
 
   return (
@@ -140,12 +113,16 @@ export const InterventionsPage: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <InterventionFeed
-            interventions={interventions}
-            onDismiss={handleDismiss}
-            onSnooze={handleSnooze}
-            onAction={handleAction}
-          />
+          {loading ? (
+            <div className="text-center py-20 text-jarvis-gray">Loading interventions…</div>
+          ) : (
+            <InterventionFeed
+              interventions={interventions}
+              onDismiss={handleDismiss}
+              onSnooze={handleSnooze}
+              onAction={handleAction}
+            />
+          )}
         </motion.div>
 
         {/* Help text */}

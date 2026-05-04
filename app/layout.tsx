@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from 'sonner'
 import { BottomNav } from '@/components/ui/BottomNav';
+import { AuthProvider } from '@/context/AuthContext';
 
 export const metadata: Metadata = {
   title: 'JARVIS - Context Resurrection',
@@ -16,19 +17,21 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen antialiased">
-        {children}
-        <Toaster 
-          theme="dark"
-          position="bottom-right"
-          toastOptions={{
-            style: {
-              background: '#112235',
-              border: '1px solid rgba(0, 224, 255, 0.1)',
-              color: '#FFFFFF',
-            },
-          }}
-        />
-        <BottomNav />
+        <AuthProvider>
+          {children}
+          <Toaster
+            theme="dark"
+            position="bottom-right"
+            toastOptions={{
+              style: {
+                background: '#112235',
+                border: '1px solid rgba(0, 224, 255, 0.1)',
+                color: '#FFFFFF',
+              },
+            }}
+          />
+          <BottomNav />
+        </AuthProvider>
       </body>
     </html>
   )

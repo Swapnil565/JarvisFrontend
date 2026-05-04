@@ -1,106 +1,150 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ToggleSwitch from './ToggleSwitch';
 import TimePicker from './TimePicker';
 import DangerButton from './DangerButton';
 import ConfirmationModal from './ConfirmationModal';
 import { AppSettings } from '@/types/settings';
+import { settingsAPI } from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
+
+const DEFAULT_SETTINGS: AppSettings = {
+  notifications: {
+    morningCheckInEnabled: true,
+    morningCheckInTime: '08:00',
+    interventionsEnabled: true,
+    insightsEnabled: true,
+    weeklyReviewEnabled: true,
+  },
+  privacy: {
+    dataRetentionDays: 365,
+    shareAnonymousUsage: false,
+  },
+  profile: {
+    name: '',
+    email: '',
+    joinedDate: new Date().toISOString(),
+    totalLogs: 0,
+    longestStreak: 0,
+    currentStreak: 0,
+  },
+};
 
 export default function SettingsPage() {
-  // Mock settings - will come from API in Phase 9
-  const [settings, setSettings] = useState<AppSettings>({
-    notifications: {
-      morningCheckInEnabled: true,
-      morningCheckInTime: '08:00',
-      interventionsEnabled: true,
-      insightsEnabled: true,
-      weeklyReviewEnabled: true,
-    },
-    privacy: {
-      dataRetentionDays: 365,
-      shareAnonymousUsage: false,
-    },
-    profile: {
-      name: 'Alex',
-      email: 'alex@example.com',
-      joinedDate: '2025-10-01T00:00:00Z',
-      totalLogs: 89,
-      longestStreak: 28,
-      currentStreak: 12,
-    },
-  });
-
+  const { isReady } = useAuth();
+  const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showClearDataModal, setShowClearDataModal] = useState(false);
 
+  useEffect(() => {
+    if (!isReady) return;
+    Promise.all([
+      settingsAPI.getSettings().catch(() => ({})),
+      settingsAPI.getProfile().catch(() => ({})),
+    ]).then(([apiSettings, profile]) => {
+      setSettings(prev => ({
+        notifications: {
+          ...prev.notifications,
+          ...(apiSettings as any)?.notifications,
+          morningCheckInEnabled: (apiSettings as any)?.notifications?.morningCheckInEnabled ?? true,
+          interventionsEnabled: (apiSettings as any)?.notifications?.interventions ?? true,
+          insightsEnabled: (apiSettings as any)?.notifications?.weeklyInsights ?? true,
+          weeklyReviewEnabled: (apiSettings as any)?.notifications?.weeklyInsights ?? true,
+        },
+        privacy: {
+          ...prev.privacy,
+          shareAnonymousUsage: (apiSettings as any)?.privacy?.shareAnonymousData ?? false,
+        },
+        profile: {
+          name: (profile as any)?.name || '',
+          email: (profile as any)?.email || '',
+          joinedDate: (profile as any)?.memberSince || new Date().toISOString(),
+          totalLogs: (profile as any)?.totalLogs || 0,
+          longestStreak: (profile as any)?.longestStreak || 0,
+          currentStreak: (profile as any)?.currentStreak || 0,
+        },
+      }));
+    });
+  }, [isReady]);
+
+  const persistSettings = (updated: AppSettings) => {
+    settingsAPI.updateSettings({
+      notifications: {
+        interventionsEnabled: updated.notifications.interventionsEnabled,
+        insightsEnabled: updated.notifications.insightsEnabled,
+        weeklyReviewEnabled: updated.notifications.weeklyReviewEnabled,
+        morningCheckInEnabled: updated.notifications.morningCheckInEnabled,
+        morningCheckInTime: updated.notifications.morningCheckInTime,
+      },
+      privacy: {
+        dataRetentionDays: updated.privacy.dataRetentionDays,
+        shareAnonymousUsage: updated.privacy.shareAnonymousUsage,
+      },
+    } as any).catch(() => {});
+  };
+
   // Handlers
   const handleNotificationToggle = (key: keyof typeof settings.notifications, value: boolean) => {
-    setSettings(prev => ({
-      ...prev,
-      notifications: {
-        ...prev.notifications,
-        [key]: value,
-      },
-    }));
-    // TODO: Save to API in Phase 9
+    setSettings(prev => {
+      const updated = { ...prev, notifications: { ...prev.notifications, [key]: value } };
+      persistSettings(updated);
+      return updated;
+    });
   };
 
   const handleTimeChange = (time: string) => {
-    setSettings(prev => ({
-      ...prev,
-      notifications: {
-        ...prev.notifications,
-        morningCheckInTime: time,
-      },
-    }));
-    // TODO: Save to API in Phase 9
+    setSettings(prev => {
+      const updated = { ...prev, notifications: { ...prev.notifications, morningCheckInTime: time } };
+      persistSettings(updated);
+      return updated;
+    });
   };
 
   const handlePrivacyToggle = (key: keyof typeof settings.privacy, value: boolean) => {
-    setSettings(prev => ({
-      ...prev,
-      privacy: {
-        ...prev.privacy,
-        [key]: value,
-      },
-    }));
-    // TODO: Save to API in Phase 9
+    setSettings(prev => {
+      const updated = { ...prev, privacy: { ...prev.privacy, [key]: value } };
+      persistSettings(updated);
+      return updated;
+    });
   };
 
   const handleDataRetentionChange = (days: number) => {
-    setSettings(prev => ({
-      ...prev,
-      privacy: {
-        ...prev.privacy,
-        dataRetentionDays: days,
-      },
-    }));
-    // TODO: Save to API in Phase 9
+    setSettings(prev => {
+      const updated = { ...prev, privacy: { ...prev.privacy, dataRetentionDays: days } };
+      persistSettings(updated);
+      return updated;
+    });
   };
 
   const handleExportData = () => {
-    console.log('Exporting data...');
-    // TODO: API call to export data in Phase 9
-    // This should download a JSON file with all user data
+    settingsAPI.exportData()
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'jarvis-data-export.json';
+        a.click();
+        URL.revokeObjectURL(url);
+      })
+      .catch(() => {});
   };
 
   const handleClearData = () => {
-    console.log('Clearing all data...');
-    // TODO: API call to clear data in Phase 9
-    // Reset to onboarding state
+    settingsAPI.clearData().catch(() => {});
   };
 
   const handleDeleteAccount = () => {
-    console.log('Deleting account...');
-    // TODO: API call to delete account in Phase 9
-    // Redirect to goodbye page
+    settingsAPI.deleteAccount().then(() => {
+      localStorage.removeItem('jarvis_token');
+      window.location.href = '/';
+    }).catch(() => {});
   };
 
   const daysSinceJoined = Math.floor(
-    (Date.now() - new Date(settings.profile.joinedDate).getTime()) / (1000 * 60 * 60 * 24)
+    (Date.now() - new Date(settings.profile.joinedDate || Date.now()).getTime()) / (1000 * 60 * 60 * 24)
   );
 
   return (

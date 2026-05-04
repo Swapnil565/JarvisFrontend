@@ -14,17 +14,24 @@ export class APIError extends Error {
   }
 }
 
+function getAuthHeader(): Record<string, string> {
+  if (typeof window === 'undefined') return {};
+  const token = localStorage.getItem('jarvis_token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 async function fetchAPI<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-  
+
   try {
     const response = await fetch(url, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
+        ...getAuthHeader(),
         ...options.headers,
       },
     });
@@ -247,8 +254,9 @@ export const progressAPI = {
   async getTrendData(
     dimension: string,
     timeRange: 'week' | 'month' | 'all'
-  ): Promise<DataPoint[]> {
-    return fetchAPI(`/api/progress/trends/${dimension}?range=${timeRange}`);
+  ): Promise<any> {
+    const days = timeRange === 'week' ? 7 : timeRange === 'month' ? 30 : 90;
+    return fetchAPI(`/api/progress/trends/${dimension}?days=${days}`);
   },
 
   async getWeeklySummaries(limit?: number): Promise<WeeklySummary[]> {
@@ -305,7 +313,11 @@ export const settingsAPI = {
   },
 
   async exportData(): Promise<Blob> {
-    const response = await fetch(`${API_BASE_URL}/api/data/export`);
+    const headers: Record<string, string> = { ...getAuthHeader() };
+    const response = await fetch(`${API_BASE_URL}/api/data/export`, {
+      method: 'POST',
+      headers,
+    });
     if (!response.ok) {
       throw new APIError('Failed to export data', response.status);
     }

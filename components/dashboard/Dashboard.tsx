@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { 
-  Activity, 
-  Brain, 
-  Sparkles, 
+import {
+  Activity,
+  Brain,
+  Sparkles,
   Mic,
   HeartPulse,
   Cpu,
@@ -27,49 +27,46 @@ import { Container, PageLayout, Button, Card } from '@/components/ui';
 import { DimensionCard } from '@/components/dashboard/DimensionCard';
 import { copy } from '@/lib/copy';
 import { StreakCounter } from '@/components/dashboard/StreakCounter';
+import { dashboardAPI, DashboardData } from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
+
+const ICON_MAP = { physical: Activity, mental: Cpu, spiritual: Sparkles };
+const EMOJI_MAP = { physical: '💪', mental: '🧠', spiritual: '✨' };
 
 export const Dashboard: React.FC = () => {
-  const streak = 7;
-  const [showMoodCheck, setShowMoodCheck] = useState(false);
+  const router = useRouter();
+  const { isReady } = useAuth();
+  const [dashData, setDashData] = useState<DashboardData | null>(null);
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
-  const [hasInterventions, setHasInterventions] = useState(true); // Mock - will come from API in Phase 9
 
-  // Mock data - will be replaced with real data from API in Phase 9
-  const dimensionsData = {
-    physical: {
-      status: 'good' as const,
-      score: 7.5,
-      insight: 'Workouts consistent. Recovery could be better.',
-      icon: Activity,
-      emoji: '💪'
-    },
-    mental: {
-      status: 'warning' as const,
-      score: 6.0,
-      insight: 'Focus is slipping. Consider reducing context switching.',
-      icon: Cpu,
-      emoji: '🧠'
-    },
-    spiritual: {
-      status: 'great' as const,
-      score: 8.5,
-      insight: 'Great balance. Keep prioritizing what matters.',
-      icon: Sparkles,
-      emoji: '✨'
-    }
+  useEffect(() => {
+    if (!isReady) return;
+    dashboardAPI.getDashboardData()
+      .then(setDashData)
+      .catch(() => {/* keep null, UI handles gracefully */});
+  }, [isReady]);
+
+  const streak = dashData?.currentStreak ?? 0;
+  const longestStreak = dashData?.longestStreak ?? 0;
+
+  const getDimension = (dim: 'physical' | 'mental' | 'spiritual') => {
+    const d = dashData?.dimensions?.find(x => x.dimension === dim);
+    return {
+      status: (d?.status as 'great' | 'good' | 'warning' | 'alert') ?? 'warning',
+      score: d?.score ?? 5.0,
+      insight: d?.insight ?? '',
+      icon: ICON_MAP[dim],
+      emoji: EMOJI_MAP[dim],
+    };
   };
 
   const handleMoodSelect = (mood: number) => {
-    console.log('Mood selected:', mood);
     setSelectedMood(mood);
-    // TODO: Send to API in Phase 9
   };
 
   const handleLogSomething = () => {
     router.push('/log');
   };
-
-  const router = useRouter();
 
   return (
     <PageLayout>
@@ -165,27 +162,28 @@ export const Dashboard: React.FC = () => {
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="heading-sm font-semibold">{copy.dashboard.statusHeadline}</h3>
-                <p className="text-xs text-jarvis-gray mt-1">You hit 2/3 dimensions</p>
+                <p className="text-xs text-jarvis-gray mt-1">
+                  {dashData
+                    ? `${dashData.dimensions.filter(d => d.status !== 'warning').length}/3 dimensions active`
+                    : 'Loading...'}
+                </p>
               </div>
               <div className="text-right">
-                <div className="text-xs text-jarvis-cyan font-medium">Streak: 4 days</div>
-                <div className="text-[10px] text-jarvis-gray mt-1">Longest: 28 days</div>
+                <div className="text-xs text-jarvis-cyan font-medium">Streak: {streak} days</div>
+                <div className="text-[10px] text-jarvis-gray mt-1">Longest: {longestStreak} days</div>
               </div>
             </div>
 
             <div className="mt-8 grid grid-cols-3 gap-6">
-              <div className="flex flex-col items-start gap-2">
-                <div className="text-xs text-jarvis-gray">Workout</div>
-                <div className="text-sm font-medium">✗</div>
-              </div>
-              <div className="flex flex-col items-start gap-2">
-                <div className="text-xs text-jarvis-gray">Tasks</div>
-                <div className="text-sm font-medium">2/3</div>
-              </div>
-              <div className="flex flex-col items-start gap-2">
-                <div className="text-xs text-jarvis-gray">Meditation</div>
-                <div className="text-sm font-medium">✗</div>
-              </div>
+              {(['physical', 'mental', 'spiritual'] as const).map(dim => {
+                const d = getDimension(dim);
+                return (
+                  <div key={dim} className="flex flex-col items-start gap-2">
+                    <div className="text-xs text-jarvis-gray capitalize">{dim}</div>
+                    <div className="text-sm font-medium">{d.status !== 'warning' ? '✓' : '✗'}</div>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="mt-8 text-xs text-jarvis-gray">{copy.dashboard.statusFooter}</div>
@@ -199,30 +197,20 @@ export const Dashboard: React.FC = () => {
           transition={{ delay: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12"
         >
-          <DimensionCard
-            dimension="physical"
-            status={dimensionsData.physical.status}
-            score={dimensionsData.physical.score}
-            insight={dimensionsData.physical.insight}
-            emoji={dimensionsData.physical.emoji}
-            icon={dimensionsData.physical.icon}
-          />
-          <DimensionCard
-            dimension="mental"
-            status={dimensionsData.mental.status}
-            score={dimensionsData.mental.score}
-            insight={dimensionsData.mental.insight}
-            emoji={dimensionsData.mental.emoji}
-            icon={dimensionsData.mental.icon}
-          />
-          <DimensionCard
-            dimension="spiritual"
-            status={dimensionsData.spiritual.status}
-            score={dimensionsData.spiritual.score}
-            insight={dimensionsData.spiritual.insight}
-            emoji={dimensionsData.spiritual.emoji}
-            icon={dimensionsData.spiritual.icon}
-          />
+          {(['physical', 'mental', 'spiritual'] as const).map(dim => {
+            const d = getDimension(dim);
+            return (
+              <DimensionCard
+                key={dim}
+                dimension={dim}
+                status={d.status}
+                score={d.score}
+                insight={d.insight}
+                emoji={d.emoji}
+                icon={d.icon}
+              />
+            );
+          })}
         </motion.div>
 
         {/* Bottom spacing */}
