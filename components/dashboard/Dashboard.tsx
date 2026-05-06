@@ -27,7 +27,7 @@ import { Container, PageLayout, Button, Card } from '@/components/ui';
 import { DimensionCard } from '@/components/dashboard/DimensionCard';
 import { copy } from '@/lib/copy';
 import { StreakCounter } from '@/components/dashboard/StreakCounter';
-import { dashboardAPI, DashboardData } from '@/lib/api';
+import { dashboardAPI, DashboardData, loggingAPI, settingsAPI } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 
 const ICON_MAP = { physical: Activity, mental: Cpu, spiritual: Sparkles };
@@ -38,12 +38,16 @@ export const Dashboard: React.FC = () => {
   const { isReady } = useAuth();
   const [dashData, setDashData] = useState<DashboardData | null>(null);
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     if (!isReady) return;
     dashboardAPI.getDashboardData()
       .then(setDashData)
-      .catch(() => {/* keep null, UI handles gracefully */});
+      .catch(() => {});
+    settingsAPI.getProfile()
+      .then(p => setUserName((p as any).name || (p as any).full_name || ''))
+      .catch(() => {});
   }, [isReady]);
 
   const streak = dashData?.currentStreak ?? 0;
@@ -62,6 +66,11 @@ export const Dashboard: React.FC = () => {
 
   const handleMoodSelect = (mood: number) => {
     setSelectedMood(mood);
+    loggingAPI.submitLog({
+      type: 'morning_mood',
+      timestamp: new Date().toISOString(),
+      data: { mood: mood + 1, feeling: ['unstoppable', 'good', 'okay', 'struggling', 'cooked'][mood] },
+    }).catch(() => {});
   };
 
   const handleLogSomething = () => {
@@ -80,15 +89,18 @@ export const Dashboard: React.FC = () => {
         <div>
           {/* The Date: Cyan, Spaced out, Uppercase */}
           <p className="text-jarvis-cyan font-display text-[10px] tracking-[0.2em] uppercase mb-1 font-semibold">
-            Wednesday, Oct 24
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
           </p>
-          
+
           {/* The Greeting: Tight leading, Color contrast */}
           <h1 className="font-display font-bold text-5xl leading-[0.95] tracking-tight">
-            <span className="text-white">Morning,</span>
+            <span className="text-white">
+              {new Date().getHours() < 12 ? 'Morning,' : new Date().getHours() < 17 ? 'Afternoon,' : 'Evening,'}
+            </span>
             <br />
-            {/* The Name is Grey to create visual hierarchy */}
-            <span className="text-jarvis-text-secondary">Swapnil.</span>
+            <span className="text-jarvis-text-secondary">
+              {userName ? `${userName.split(' ')[0]}.` : 'there.'}
+            </span>
           </h1>
         </div>
 

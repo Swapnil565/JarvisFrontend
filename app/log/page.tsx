@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PageLayout, Modal } from '@/components/ui';
+import { PageLayout } from '@/components/ui';
 import { MorningMoodFlow } from '@/components/logging/MorningMoodFlow';
 import { QuickLogFlow } from '@/components/logging/QuickLogFlow';
 import { EndOfDayFlow } from '@/components/logging/EndOfDayFlow';
 import { VoiceLog } from '@/components/logging/VoiceLog';
+import { loggingAPI } from '@/lib/api';
 
 type LogType = 'morning' | 'quick' | 'endofday' | null;
 
@@ -14,14 +15,10 @@ export default function LogPage() {
   const router = useRouter();
   const [logType, setLogType] = useState<LogType>(null);
 
-  // Determine which flow to show by default based on time
   React.useEffect(() => {
     const hour = new Date().getHours();
-    
-    // Check if morning mood already logged today
     const lastMorningLog = localStorage.getItem('jarvis_last_morning_log');
-    const today = new Date().toDateString();
-    const alreadyLoggedToday = lastMorningLog === today;
+    const alreadyLoggedToday = lastMorningLog === new Date().toDateString();
 
     if (hour >= 6 && hour < 11 && !alreadyLoggedToday) {
       setLogType('morning');
@@ -33,27 +30,39 @@ export default function LogPage() {
   }, []);
 
   const handleMorningComplete = (data: { mood: number; notes?: string }) => {
-    console.log('Morning mood:', data);
-    // TODO: Send to API in Phase 9
+    loggingAPI.submitLog({
+      type: 'morning_mood',
+      timestamp: new Date().toISOString(),
+      data: { mood: data.mood, notes: data.notes || '' },
+    }).catch(() => {});
     localStorage.setItem('jarvis_last_morning_log', new Date().toDateString());
     router.push('/dashboard');
   };
 
   const handleQuickLogComplete = (data: Record<string, string>) => {
-    console.log('Quick log:', data);
-    // TODO: Send to API in Phase 9
+    loggingAPI.submitLog({
+      type: 'quick_log',
+      timestamp: new Date().toISOString(),
+      data,
+    }).catch(() => {});
     router.push('/dashboard');
   };
 
   const handleVoiceLogComplete = (data: { transcript: string; tags: string[] }) => {
-    console.log('Voice log:', data);
-    // TODO: Send to API in Phase 9
+    loggingAPI.submitLog({
+      type: 'quick_log',
+      timestamp: new Date().toISOString(),
+      data: { transcript: data.transcript, tags: data.tags.join(','), event_type: 'voice_note' },
+    }).catch(() => {});
     router.push('/dashboard');
   };
 
   const handleEndOfDayComplete = (data: Record<string, string>) => {
-    console.log('End of day:', data);
-    // TODO: Send to API in Phase 9
+    loggingAPI.submitLog({
+      type: 'end_of_day',
+      timestamp: new Date().toISOString(),
+      data,
+    }).catch(() => {});
     router.push('/dashboard');
   };
 
